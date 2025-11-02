@@ -1,30 +1,37 @@
 import { notFound } from "next/navigation";
-import { getPostBySlug, getPostBlocks } from "@/lib/notion";
-import { mapPostMeta } from "@/lib/mapNotion";
 import dynamic from "next/dynamic";
+import { getPostBySlug, getPostRecordMap } from "@/lib/notion";
+import { mapPostMeta } from "@/lib/mapNotion";
 
-const NotionRenderer = dynamic(() => import("react-notion-x").then(m => m.NotionRenderer), { ssr: false });
+// Styles for react-notion-x (global, safe to import here)
+import "react-notion-x/src/styles.css";
+import "prismjs/themes/prism.css";
+
+const NotionRenderer = dynamic(
+  () => import("react-notion-x").then((m) => m.NotionRenderer),
+  { ssr: false }
+);
 
 export const revalidate = 60;
 
 export default async function PostPage({ params }: { params: { slug: string } }) {
-  try {
-    const page = await getPostBySlug(params.slug);
-    if (!page) notFound();
-    const meta = mapPostMeta(page);
-    const blocks = await getPostBlocks(page.id);
-    return (
-      <article className="prose prose-zinc max-w-none">
-        <h1>{meta.title}</h1>
-        {meta.publishedAt && <p className="text-sm text-zinc-500">{new Date(meta.publishedAt).toLocaleDateString()}</p>}
-        <div className="mt-6">
-          {/* NotionRenderer requires recordMap structure from getPostBlocks */}
-          <NotionRenderer recordMap={blocks as any} fullPage={false} darkMode={false} />
-        </div>
-      </article>
-    );
-  } catch (error) {
-    console.error("Error loading post:", error);
-    notFound();
-  }
+  const page = await getPostBySlug(params.slug);
+  if (!page) notFound();
+
+  const meta = mapPostMeta(page);
+  const recordMap = await getPostRecordMap(page.id);
+
+  return (
+    <article className="prose prose-zinc max-w-none">
+      <h1>{meta.title}</h1>
+      {meta.publishedAt && (
+        <p className="text-sm text-zinc-500">
+          {new Date(meta.publishedAt).toLocaleDateString()}
+        </p>
+      )}
+      <div className="mt-6">
+        <NotionRenderer recordMap={recordMap} fullPage={false} darkMode={false} />
+      </div>
+    </article>
+  );
 }

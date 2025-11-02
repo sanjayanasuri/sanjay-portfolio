@@ -1,6 +1,10 @@
 import { Client } from "@notionhq/client";
+import { NotionAPI } from "notion-client";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notionApi = new NotionAPI({
+  authToken: process.env.NOTION_TOKEN, // allows access to private pages you shared to the integration
+});
 
 export type NotionListOptions = { limit?: number };
 
@@ -79,52 +83,9 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
-export async function getPostBlocks(pageId: string) {
-  try {
-    // Fetch the page itself first
-    const page = await notion.pages.retrieve({ page_id: pageId });
-    
-    const blocks: any[] = [];
-    let cursor: string | undefined = undefined;
-    // @ts-ignore notion types
-    while (true) {
-      // @ts-ignore
-      const { results, next_cursor, has_more } = await notion.blocks.children.list({ block_id: pageId, start_cursor: cursor });
-      blocks.push(...results);
-      if (!has_more) break;
-      cursor = next_cursor as string | undefined;
-    }
-    
-    // Build recordMap structure that react-notion-x expects
-    const recordMap: any = {
-      block: {
-        [pageId]: page as any,
-      },
-      collection: {},
-      collection_view: {},
-      discussion: {},
-      comment: {},
-      signed_urls: {},
-    };
-    
-    // Add all blocks to recordMap
-    blocks.forEach((block: any) => {
-      if (block?.id) {
-        recordMap.block[block.id] = block;
-      }
-    });
-    
-    return recordMap;
-  } catch (error) {
-    console.error("Error fetching blocks:", error);
-    // Return minimal valid structure
-    return {
-      block: {},
-      collection: {},
-      collection_view: {},
-      discussion: {},
-      comment: {},
-      signed_urls: {},
-    } as any;
-  }
+// NEW: return a full recordMap that react-notion-x expects
+export async function getPostRecordMap(pageId: string): Promise<any> {
+  // notion-client builds the exact structure react-notion-x needs
+  const recordMap = await notionApi.getPage(pageId);
+  return recordMap;
 }
