@@ -83,14 +83,36 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
+// Helper to format Notion ID with hyphens (UUID format)
+function formatNotionId(id: string): string {
+  // Remove existing hyphens and reformat
+  const cleanId = id.replace(/-/g, '');
+  if (cleanId.length !== 32) return id; // Return as-is if not standard format
+  // Format as 8-4-4-4-12
+  return `${cleanId.slice(0, 8)}-${cleanId.slice(8, 12)}-${cleanId.slice(12, 16)}-${cleanId.slice(16, 20)}-${cleanId.slice(20)}`;
+}
+
 // NEW: return a full recordMap that react-notion-x expects
 export async function getPostRecordMap(pageId: string): Promise<any> {
   try {
-    console.log(`[getPostRecordMap] Fetching page with ID: ${pageId}`);
-    // notion-client builds the exact structure react-notion-x needs
-    const recordMap = await notionApi.getPage(pageId);
-    console.log(`[getPostRecordMap] Successfully fetched recordMap for page: ${pageId}`);
-    return recordMap;
+    // Try with formatted UUID first
+    const formattedId = formatNotionId(pageId);
+    console.log(`[getPostRecordMap] Fetching page - Original ID: ${pageId}, Formatted: ${formattedId}`);
+    
+    try {
+      const recordMap = await notionApi.getPage(formattedId);
+      console.log(`[getPostRecordMap] Successfully fetched recordMap using formatted ID`);
+      return recordMap;
+    } catch (formattedError: any) {
+      // If formatted ID fails, try original
+      if (formattedId !== pageId) {
+        console.log(`[getPostRecordMap] Formatted ID failed, trying original ID`);
+        const recordMap = await notionApi.getPage(pageId);
+        console.log(`[getPostRecordMap] Successfully fetched recordMap using original ID`);
+        return recordMap;
+      }
+      throw formattedError;
+    }
   } catch (error: any) {
     console.error(`[getPostRecordMap] Error fetching recordMap for page ${pageId}:`, {
       message: error?.message,
@@ -98,10 +120,57 @@ export async function getPostRecordMap(pageId: string): Promise<any> {
       status: error?.status,
       statusCode: error?.statusCode,
       name: error?.name,
-      // Log more details about the error
       response: error?.response ? JSON.stringify(error.response).substring(0, 500) : undefined,
       stack: process.env.NODE_ENV === 'development' ? error?.stack?.substring(0, 500) : undefined,
     });
-    throw error;
+    
+    // Fallback: Build recordMap using Notion API directly
+    console.log(`[getPostRecordMap] Attempting fallback: building recordMap with Notion API`);
+    try {
+      return await buildRecordMapWithNotionAPI(pageId);
+    } catch (fallbackError: any) {
+      console.error(`[getPostRecordMap] Fallback also failed:`, fallbackError?.message);
+      throw error; // Throw original error
+    }
   }
+}
+
+// Fallback: Build recordMap using @notionhq/client
+async function buildRecordMapWithNotionAPI(pageId: string): Promise<any> {
+  // Fetch the page
+  const page = await notion.pages.retrieve({ page_id: pageId });
+  
+  // Fetch all blocks
+  const blocks: any[] = [];
+  let cursor: string | undefined = undefined;
+  while (true) {
+    const { results, next_cursor, has_more } = await notion.blocks.children.list({ 
+      block_id: pageId, 
+      start_cursor: cursor 
+    });
+    blocks.push(...results);
+    if (!has_more) break;
+    cursor = next_cursor as string | undefined;
+  }
+  
+  // Build recordMap structure
+  const recordMap: any = {
+    block: {
+      [pageId]: page as any,
+    },
+    collection: {},
+    collection_view: {},
+    discussion: {},
+    comment: {},
+    signed_urls: {},
+  };
+  
+  // Add all blocks
+  blocks.forEach((block: any) => {
+    if (block?.id) {
+      recordMap.block[block.id] = block;
+    }
+  });
+  
+  return recordMap;
 }
