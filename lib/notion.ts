@@ -7,6 +7,7 @@ export type NotionListOptions = { limit?: number };
 export async function listPosts({ limit = 50 }: NotionListOptions) {
   const db = process.env.NOTION_POSTS_DB_ID!;
   try {
+    // Try with Published filter and PublishedAt sort
     const res = await notion.databases.query({
       database_id: db,
       filter: { property: "Published", checkbox: { equals: true } },
@@ -15,14 +16,35 @@ export async function listPosts({ limit = 50 }: NotionListOptions) {
     });
     return res.results as any[];
   } catch (error: any) {
-    // Fallback if PublishedAt property doesn't exist - try without sort
-    if (error?.code === 'validation_error' && error?.message?.includes('PublishedAt')) {
-      const res = await notion.databases.query({
-        database_id: db,
-        filter: { property: "Published", checkbox: { equals: true } },
-        page_size: limit,
-      });
-      return res.results as any[];
+    if (error?.code === 'validation_error') {
+      if (error?.message?.includes('PublishedAt')) {
+        // Fallback: PublishedAt doesn't exist - try without sort
+        try {
+          const res = await notion.databases.query({
+            database_id: db,
+            filter: { property: "Published", checkbox: { equals: true } },
+            page_size: limit,
+          });
+          return res.results as any[];
+        } catch (filterError: any) {
+          if (filterError?.message?.includes('Published')) {
+            // Fallback: Published doesn't exist - return all posts
+            const res = await notion.databases.query({
+              database_id: db,
+              page_size: limit,
+            });
+            return res.results as any[];
+          }
+          throw filterError;
+        }
+      } else if (error?.message?.includes('Published')) {
+        // Fallback: Published doesn't exist - return all posts
+        const res = await notion.databases.query({
+          database_id: db,
+          page_size: limit,
+        });
+        return res.results as any[];
+      }
     }
     throw error;
   }

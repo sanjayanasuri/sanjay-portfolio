@@ -1,3 +1,6 @@
+import "react-notion-x/src/styles.css";
+import "prismjs/themes/prism.css"; // if you have code blocks in posts
+
 import type { Metadata } from "next";
 import "../styles/globals.css";
 
