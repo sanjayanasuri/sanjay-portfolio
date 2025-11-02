@@ -8,18 +8,23 @@ const NotionRenderer = dynamic(() => import("react-notion-x").then(m => m.Notion
 export const revalidate = 60;
 
 export default async function PostPage({ params }: { params: { slug: string } }) {
-  const page = await getPostBySlug(params.slug);
-  if (!page) notFound();
-  const meta = mapPostMeta(page);
-  const blocks = await getPostBlocks(page.id);
-  return (
-    <article className="prose prose-zinc max-w-none">
-      <h1>{meta.title}</h1>
-      {meta.publishedAt && <p className="text-sm text-zinc-500">{new Date(meta.publishedAt).toLocaleDateString()}</p>}
-      <div className="mt-6">
-        {/* NotionRenderer requires recordMap structure from getPostBlocks */}
-        <NotionRenderer recordMap={blocks as any} fullPage={false} darkMode={false} />
-      </div>
-    </article>
-  );
+  try {
+    const page = await getPostBySlug(params.slug);
+    if (!page) notFound();
+    const meta = mapPostMeta(page);
+    const blocks = await getPostBlocks(page.id);
+    return (
+      <article className="prose prose-zinc max-w-none">
+        <h1>{meta.title}</h1>
+        {meta.publishedAt && <p className="text-sm text-zinc-500">{new Date(meta.publishedAt).toLocaleDateString()}</p>}
+        <div className="mt-6">
+          {/* NotionRenderer requires recordMap structure from getPostBlocks */}
+          <NotionRenderer recordMap={blocks as any} fullPage={false} darkMode={false} />
+        </div>
+      </article>
+    );
+  } catch (error) {
+    console.error("Error loading post:", error);
+    notFound();
+  }
 }
