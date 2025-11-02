@@ -6,36 +6,37 @@ import NotionContent from "@/components/NotionContent";
 export const revalidate = 60;
 
 export default async function PostPage({ params }: { params: { slug: string } }) {
+  let page;
   try {
-    const page = await getPostBySlug(params.slug);
+    page = await getPostBySlug(params.slug);
     if (!page) {
-      console.error(`Post not found for slug: ${params.slug}`);
+      console.error(`[PostPage] Post not found for slug: ${params.slug}`);
       notFound();
     }
-
-    const meta = mapPostMeta(page);
-    const recordMap = await getPostRecordMap(page.id);
-
-    return (
-      <article className="prose prose-zinc max-w-none">
-        <h1>{meta.title}</h1>
-        {meta.publishedAt && (
-          <p className="text-sm text-zinc-500">
-            {new Date(meta.publishedAt).toLocaleDateString()}
-          </p>
-        )}
-        <div className="mt-6">
-          <NotionContent recordMap={recordMap} />
-        </div>
-      </article>
-    );
   } catch (error: any) {
-    // Log detailed error information
-    console.error("Error in PostPage:", {
-      slug: params.slug,
+    console.error(`[PostPage] Error fetching post by slug "${params.slug}":`, {
       message: error?.message,
       code: error?.code,
       status: error?.status,
+    });
+    notFound();
+  }
+
+  let meta, recordMap;
+  try {
+    meta = mapPostMeta(page);
+    console.log(`[PostPage] Fetching recordMap for page ID: ${page.id}`);
+    recordMap = await getPostRecordMap(page.id);
+    console.log(`[PostPage] Successfully fetched recordMap for: ${params.slug}`);
+  } catch (error: any) {
+    // Log detailed error information
+    console.error(`[PostPage] Error loading content for slug "${params.slug}":`, {
+      pageId: page?.id,
+      message: error?.message,
+      code: error?.code,
+      status: error?.status,
+      statusCode: error?.statusCode,
+      response: error?.response ? JSON.stringify(error.response).substring(0, 200) : undefined,
       stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined,
     });
     
@@ -45,6 +46,21 @@ export default async function PostPage({ params }: { params: { slug: string } })
     }
     
     // In production, show 404 instead of exposing error details
+    // But log the error so you can see it in Vercel logs
     notFound();
   }
+
+  return (
+    <article className="prose prose-zinc max-w-none">
+      <h1>{meta.title}</h1>
+      {meta.publishedAt && (
+        <p className="text-sm text-zinc-500">
+          {new Date(meta.publishedAt).toLocaleDateString()}
+        </p>
+      )}
+      <div className="mt-6">
+        <NotionContent recordMap={recordMap} />
+      </div>
+    </article>
+  );
 }
