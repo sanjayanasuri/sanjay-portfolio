@@ -17,7 +17,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
       <h1>{meta.title}</h1>
       {meta.publishedAt && <p className="text-sm text-zinc-500">{new Date(meta.publishedAt).toLocaleDateString()}</p>}
       <div className="mt-6">
-        <NotionRenderer recordMap={blocks} fullPage={false} darkMode={false} />
+        <NotionRenderer recordMap={blocks as any} fullPage={false} darkMode={false} />
       </div>
     </article>
   );
