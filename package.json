@@ -5,7 +5,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "playwright test"
+    "test": "playwright test",
+    "revalidate": "node scripts/revalidate.mjs",
+    "revalidate:local": "NEXT_PUBLIC_SITE_URL=http://localhost:3000 node scripts/revalidate.mjs",
+    "revalidate:prod": "node scripts/revalidate.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
