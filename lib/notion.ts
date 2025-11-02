@@ -85,7 +85,17 @@ export async function getPostBySlug(slug: string) {
 
 // NEW: return a full recordMap that react-notion-x expects
 export async function getPostRecordMap(pageId: string): Promise<any> {
-  // notion-client builds the exact structure react-notion-x needs
-  const recordMap = await notionApi.getPage(pageId);
-  return recordMap;
+  try {
+    // notion-client builds the exact structure react-notion-x needs
+    const recordMap = await notionApi.getPage(pageId);
+    return recordMap;
+  } catch (error: any) {
+    console.error(`Error fetching recordMap for page ${pageId}:`, {
+      message: error?.message,
+      code: error?.code,
+      status: error?.status,
+      stack: error?.stack,
+    });
+    throw error;
+  }
 }
