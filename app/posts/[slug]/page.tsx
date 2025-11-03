@@ -51,14 +51,22 @@ export default async function PostPage({ params }: { params: { slug: string } })
   }
 
   return (
-    <article className="prose prose-zinc max-w-none">
-      <h1>{meta.title}</h1>
-      {meta.publishedAt && (
-        <p className="text-sm text-zinc-500">
-          {new Date(meta.publishedAt).toLocaleDateString()}
-        </p>
-      )}
-      <div className="mt-6">
+    <article className="max-w-3xl">
+      <header className="mb-12 pb-8 border-b border-zinc-200/50">
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 mb-4">
+          {meta.title}
+        </h1>
+        {meta.publishedAt && (
+          <p className="text-sm text-zinc-500">
+            {new Date(meta.publishedAt).toLocaleDateString('en-US', { 
+              month: 'long', 
+              day: 'numeric', 
+              year: 'numeric' 
+            })}
+          </p>
+        )}
+      </header>
+      <div className="prose prose-zinc prose-lg max-w-none">
         <NotionContent key={page.id} recordMap={recordMap} />
       </div>
     </article>

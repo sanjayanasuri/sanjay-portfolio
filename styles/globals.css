@@ -2,4 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-.prose img { border-radius: 0.75rem; }
+.prose {
+  @apply text-zinc-700;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply text-zinc-900 font-semibold;
+}
+
+.prose a {
+  @apply text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-400 transition-colors;
+}
+
+.prose img {
+  @apply rounded-xl shadow-sm;
+  border-radius: 0.75rem;
+}
+
+.prose code {
+  @apply bg-zinc-100 text-zinc-900 px-1.5 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-zinc-900 text-zinc-100 rounded-xl p-4 overflow-x-auto;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-zinc-300 pl-4 italic text-zinc-600;
+}
+
+.prose hr {
+  @apply border-zinc-200;
+}
