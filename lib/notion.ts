@@ -56,16 +56,25 @@ export async function listPosts({ limit = 50 }: NotionListOptions) {
 
 export async function getPostBySlug(slug: string) {
   const db = process.env.NOTION_POSTS_DB_ID!;
+  console.log(`[getPostBySlug] Looking for post with slug: "${slug}"`);
   try {
     const res = await notion.databases.query({
       database_id: db,
       filter: { property: "Slug", rich_text: { equals: slug } },
       page_size: 1,
     });
-    return (res.results[0] as any) || null;
+    const page = (res.results[0] as any) || null;
+    if (page) {
+      const title = page.properties?.Title?.title?.[0]?.plain_text || page.properties?.Title?.rich_text?.[0]?.plain_text || 'Untitled';
+      console.log(`[getPostBySlug] ✅ Found post "${title}" with ID: ${page.id} for slug: "${slug}"`);
+    } else {
+      console.log(`[getPostBySlug] ❌ No post found for slug: "${slug}"`);
+    }
+    return page;
   } catch (error: any) {
     // If Slug property doesn't exist, try without filter and match manually
     if (error?.code === 'validation_error' && error?.message?.includes('Slug')) {
+      console.log(`[getPostBySlug] Slug property error, trying manual match for: "${slug}"`);
       const res = await notion.databases.query({
         database_id: db,
         page_size: 100,
@@ -77,6 +86,11 @@ export async function getPostBySlug(slug: string) {
                         page.id.replace(/-/g, '');
         return pageSlug === slug || page.id === slug;
       });
+      if (match) {
+        const matchAny = match as any;
+        const title = matchAny.properties?.Title?.title?.[0]?.plain_text || matchAny.properties?.Title?.rich_text?.[0]?.plain_text || 'Untitled';
+        console.log(`[getPostBySlug] ✅ Found post "${title}" with ID: ${matchAny.id} for slug: "${slug}"`);
+      }
       return (match as any) || null;
     }
     throw error;

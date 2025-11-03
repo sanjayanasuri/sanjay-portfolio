@@ -19,8 +19,13 @@ interface NotionContentProps {
 }
 
 export default function NotionContent({ recordMap }: NotionContentProps) {
+  // Debug: log the first block ID to verify we're getting different content
+  const firstBlockId = recordMap?.block ? Object.keys(recordMap.block)[0] : 'none';
+  console.log(`[NotionContent] Rendering with first block ID: ${firstBlockId}`);
+  
   return (
     <NotionRenderer 
+      key={firstBlockId}
       recordMap={recordMap} 
       fullPage={false} 
       darkMode={false} 

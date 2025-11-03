@@ -25,9 +25,9 @@ export default async function PostPage({ params }: { params: { slug: string } })
   let meta, recordMap;
   try {
     meta = mapPostMeta(page);
-    console.log(`[PostPage] Fetching recordMap for page ID: ${page.id}`);
+    console.log(`[PostPage] 📄 Slug: "${params.slug}" → Page ID: ${page.id}, Title: "${meta.title}"`);
     recordMap = await getPostRecordMap(page.id);
-    console.log(`[PostPage] Successfully fetched recordMap for: ${params.slug}`);
+    console.log(`[PostPage] ✅ Successfully loaded: "${meta.title}" (slug: ${params.slug}, ID: ${page.id})`);
   } catch (error: any) {
     // Log detailed error information
     console.error(`[PostPage] Error loading content for slug "${params.slug}":`, {
@@ -59,7 +59,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
         </p>
       )}
       <div className="mt-6">
-        <NotionContent recordMap={recordMap} />
+        <NotionContent key={page.id} recordMap={recordMap} />
       </div>
     </article>
   );
