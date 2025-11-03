@@ -11,16 +11,31 @@ npm run dev
 ```
 
 ## 2) Notion setup
+
+### Posts Database
 1. Create a **Posts** database with properties: Title, Slug (Text), Published (Checkbox), PublishedAt (Date), Excerpt (Text), Tags (Multi-select), Cover (File/URL).
 2. Create a Notion **internal integration** and copy its secret → `NOTION_TOKEN`.
 3. Share the Posts database with the integration.
 4. Copy the database ID → `NOTION_POSTS_DB_ID`.
+
+### Gallery Database (Optional)
+1. Create a **Gallery** database in Notion
+2. Add these properties (flexible naming):
+   - **Image** (File/URL) - required, the main image
+   - **Title** (Text) - optional, image title
+   - **Caption** (Text) - optional, description shown on hover
+   - **Category** (Select) - optional, for filtering
+   - **Tags** (Multi-select) - optional
+3. Share the Gallery database with your integration
+4. Copy the database ID → `NOTION_GALLERY_DB_ID`
+5. Add `NOTION_GALLERY_DB_ID=your-database-id` to `.env.local`
 
 ## 3) Deploy to Vercel
 - Import the GitHub repo into Vercel.
 - Add env vars in Project Settings → Environment Variables:
   - `NOTION_TOKEN`
   - `NOTION_POSTS_DB_ID`
+  - `NOTION_GALLERY_DB_ID` (optional, for gallery page)
   - `REVALIDATE_SECRET`
   - `NEXT_PUBLIC_SITE_URL` (your domain, e.g., `https://sanjayanasuri.com`)
 - Deploy.
