@@ -24,8 +24,11 @@ export default async function Home() {
               Sanjay Anasuri
             </h1>
             <p className="text-lg text-zinc-600 leading-relaxed max-w-2xl">
-              Data science, product design, and artifacts from the road. 
-              Exploring the intersection of technology, design, and human experience.
+              Hello! I'm Sanjay. I'm in my final year of undergrad at Purdue University,
+              where I'm pursuing a B.S in Data Science. I'm interested in the intersection between
+              technology and human-centered design. I write about my experiences and learnings.
+              Three words to describe me are: curious, creative, and empathetic. 
+              
             </p>
           </div>
         </div>
