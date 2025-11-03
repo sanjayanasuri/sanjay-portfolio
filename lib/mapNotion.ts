@@ -21,3 +21,22 @@ export function mapPostMeta(page: any) {
     id: string; slug: string; title: string; excerpt?: string; cover?: string; publishedAt?: string; tags?: string[];
   };
 }
+
+export function mapGalleryItem(page: any) {
+  const p = page.properties || {};
+  return {
+    id: page.id,
+    image: fileUrl(p.Image) || fileUrl(p.Photo) || fileUrl(p.Picture) || fileUrl(p.Cover),
+    title: text(p.Title) || text(p.Name) || text(p.Caption) || undefined,
+    caption: text(p.Caption) || text(p.Description) || undefined,
+    category: p.Category?.select?.name || p.Category?.multi_select?.[0]?.name || undefined,
+    tags: (p.Tags?.multi_select || []).map((t: any) => t.name),
+  } as {
+    id: string;
+    image?: string;
+    title?: string;
+    caption?: string;
+    category?: string;
+    tags?: string[];
+  };
+}

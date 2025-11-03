@@ -8,6 +8,25 @@ const notionApi = new NotionAPI({
 
 export type NotionListOptions = { limit?: number };
 
+// Gallery functions
+export async function listGalleryItems({ limit = 100 }: NotionListOptions = {}) {
+  const db = process.env.NOTION_GALLERY_DB_ID;
+  if (!db) {
+    console.warn("NOTION_GALLERY_DB_ID not set, returning empty gallery");
+    return [];
+  }
+  try {
+    const res = await notion.databases.query({
+      database_id: db,
+      page_size: limit,
+    });
+    return res.results as any[];
+  } catch (error: any) {
+    console.error("Error fetching gallery items:", error);
+    return [];
+  }
+}
+
 export async function listPosts({ limit = 50 }: NotionListOptions) {
   const db = process.env.NOTION_POSTS_DB_ID!;
   try {
