@@ -29,7 +29,7 @@ export default async function Home() {
                 />
               )}
               <h3 className="mb-1 font-medium">
-                <Link href={`/posts/${p.slug}`}>{p.title}</Link>
+                <Link href={`/posts/${encodeURIComponent(p.slug)}`}>{p.title}</Link>
               </h3>
               {p.excerpt && <p className="text-sm text-zinc-600 line-clamp-2">{p.excerpt}</p>}
             </li>

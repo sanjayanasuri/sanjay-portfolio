@@ -56,19 +56,32 @@ export async function listPosts({ limit = 50 }: NotionListOptions) {
 
 export async function getPostBySlug(slug: string) {
   const db = process.env.NOTION_POSTS_DB_ID!;
-  console.log(`[getPostBySlug] Looking for post with slug: "${slug}"`);
+  // Decode URL-encoded slug (handles %20, etc.)
+  const decodedSlug = decodeURIComponent(slug);
+  console.log(`[getPostBySlug] Looking for post with slug: "${slug}" (decoded: "${decodedSlug}")`);
   try {
-    const res = await notion.databases.query({
+    // Try with decoded slug first
+    let res = await notion.databases.query({
       database_id: db,
-      filter: { property: "Slug", rich_text: { equals: slug } },
+      filter: { property: "Slug", rich_text: { equals: decodedSlug } },
       page_size: 1,
     });
-    const page = (res.results[0] as any) || null;
+    let page = (res.results[0] as any) || null;
+    
+    // If not found, try with original encoded slug
+    if (!page && decodedSlug !== slug) {
+      res = await notion.databases.query({
+        database_id: db,
+        filter: { property: "Slug", rich_text: { equals: slug } },
+        page_size: 1,
+      });
+      page = (res.results[0] as any) || null;
+    }
     if (page) {
       const title = page.properties?.Title?.title?.[0]?.plain_text || page.properties?.Title?.rich_text?.[0]?.plain_text || 'Untitled';
-      console.log(`[getPostBySlug] ✅ Found post "${title}" with ID: ${page.id} for slug: "${slug}"`);
+      console.log(`[getPostBySlug] ✅ Found post "${title}" with ID: ${page.id} for slug: "${decodedSlug}"`);
     } else {
-      console.log(`[getPostBySlug] ❌ No post found for slug: "${slug}"`);
+      console.log(`[getPostBySlug] ❌ No post found for slug: "${decodedSlug}"`);
     }
     return page;
   } catch (error: any) {
@@ -79,12 +92,12 @@ export async function getPostBySlug(slug: string) {
         database_id: db,
         page_size: 100,
       });
-      // Try to find by matching slug in title or ID
+      // Try to find by matching slug in title or ID (compare both encoded and decoded)
       const match = res.results.find((page: any) => {
         const pageSlug = page.properties?.Slug?.rich_text?.[0]?.plain_text || 
                         page.properties?.slug?.rich_text?.[0]?.plain_text ||
                         page.id.replace(/-/g, '');
-        return pageSlug === slug || page.id === slug;
+        return pageSlug === slug || pageSlug === decodedSlug || page.id === slug || page.id === decodedSlug;
       });
       if (match) {
         const matchAny = match as any;

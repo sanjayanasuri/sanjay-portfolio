@@ -13,7 +13,7 @@ export default async function PostsPage() {
       <ul className="space-y-4">
         {posts.map((p) => (
           <li key={p.slug}>
-            <Link className="underline" href={`/posts/${p.slug}`}>{p.title}</Link>
+            <Link className="underline" href={`/posts/${encodeURIComponent(p.slug)}`}>{p.title}</Link>
             {p.publishedAt && <span className="ml-2 text-xs text-zinc-500">{new Date(p.publishedAt).toLocaleDateString()}</span>}
           </li>
         ))}
