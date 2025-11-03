@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: { typedRoutes: true },
-  images: { remotePatterns: [{ protocol: "https", hostname: "*" }] },
+  images: { 
+    remotePatterns: [{ protocol: "https", hostname: "*" }],
+    unoptimized: false,
+  },
   webpack: (config, { isServer }) => {
     // Fix for react-notion-x SSR issues
     if (!isServer) {

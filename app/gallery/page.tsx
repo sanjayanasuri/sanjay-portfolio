@@ -10,9 +10,9 @@ export default async function GalleryPage() {
 
   return (
     <section className="space-y-12">
-      <div>
+      <div className="text-center">
         <h1 className="text-4xl font-semibold mb-4 text-zinc-900">Gallery</h1>
-        <p className="text-lg text-zinc-600 max-w-2xl">
+        <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
           A collection of moments, projects, and visual experiments.
         </p>
       </div>

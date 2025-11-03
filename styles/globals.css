@@ -3,37 +3,141 @@
 @tailwind utilities;
 
 .prose {
-  @apply text-zinc-700;
+  @apply text-zinc-700 leading-relaxed;
 }
 
-.prose h1,
-.prose h2,
-.prose h3,
+.prose h1 {
+  @apply text-zinc-900 font-bold text-3xl mb-6 mt-8;
+}
+
+.prose h2 {
+  @apply text-zinc-900 font-semibold text-2xl mb-4 mt-8 border-b border-zinc-200 pb-2;
+}
+
+.prose h3 {
+  @apply text-zinc-900 font-semibold text-xl mb-3 mt-6;
+}
+
 .prose h4 {
-  @apply text-zinc-900 font-semibold;
+  @apply text-zinc-900 font-semibold text-lg mb-2 mt-4;
+}
+
+.prose p {
+  @apply mb-4 leading-relaxed text-zinc-700;
 }
 
 .prose a {
-  @apply text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-400 transition-colors;
+  @apply text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-400 transition-colors font-medium;
 }
 
 .prose img {
-  @apply rounded-xl shadow-sm;
+  @apply rounded-xl shadow-lg my-6;
   border-radius: 0.75rem;
 }
 
 .prose code {
-  @apply bg-zinc-100 text-zinc-900 px-1.5 py-0.5 rounded text-sm;
+  @apply bg-zinc-100 text-zinc-900 px-1.5 py-0.5 rounded text-sm font-mono;
 }
 
 .prose pre {
-  @apply bg-zinc-900 text-zinc-100 rounded-xl p-4 overflow-x-auto;
+  @apply bg-zinc-900 text-zinc-100 rounded-xl p-6 overflow-x-auto shadow-lg my-6;
+}
+
+.prose pre code {
+  @apply bg-transparent text-zinc-100 p-0;
 }
 
 .prose blockquote {
-  @apply border-l-4 border-zinc-300 pl-4 italic text-zinc-600;
+  @apply border-l-4 border-zinc-300 pl-6 italic text-zinc-600 my-6 bg-zinc-50 py-4 rounded-r-lg;
 }
 
 .prose hr {
-  @apply border-zinc-200;
+  @apply border-zinc-200 my-8;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-4 space-y-2;
+}
+
+.prose li {
+  @apply text-zinc-700;
+}
+
+.prose strong {
+  @apply font-semibold text-zinc-900;
+}
+
+.prose em {
+  @apply italic text-zinc-600;
+}
+
+/* Custom Notion styling - Make it more exciting */
+.notion-page {
+  @apply max-w-none;
+}
+
+.notion-text {
+  @apply text-zinc-700 leading-relaxed text-base;
+}
+
+.notion-header {
+  @apply mb-8;
+}
+
+/* Enhanced Notion blocks */
+.notion-h {
+  @apply font-bold text-zinc-900;
+}
+
+.notion-h1 {
+  @apply text-3xl font-bold text-zinc-900 mt-10 mb-6 pb-3 border-b border-zinc-200;
+}
+
+.notion-h2 {
+  @apply text-2xl font-semibold text-zinc-900 mt-8 mb-4;
+}
+
+.notion-h3 {
+  @apply text-xl font-semibold text-zinc-900 mt-6 mb-3;
+}
+
+.notion-image {
+  @apply rounded-2xl shadow-xl my-8;
+}
+
+.notion-callout {
+  @apply rounded-xl p-6 my-6 border-l-4 bg-zinc-50 border-zinc-400;
+}
+
+.notion-list {
+  @apply space-y-3;
+}
+
+.notion-list-item {
+  @apply text-zinc-700 leading-relaxed;
+}
+
+/* Code blocks */
+.notion-code {
+  @apply bg-zinc-900 text-zinc-100 rounded-xl p-6 shadow-xl my-6 overflow-x-auto;
+}
+
+.notion-inline-code {
+  @apply bg-zinc-100 text-zinc-900 px-2 py-1 rounded text-sm font-mono;
+}
+
+/* Quotes */
+.notion-quote {
+  @apply border-l-4 border-zinc-400 pl-6 italic text-zinc-600 my-6 bg-zinc-50 py-4 rounded-r-lg;
+}
+
+/* Dividers */
+.notion-hr {
+  @apply border-zinc-200 my-10;
+}
+
+/* Links */
+.notion-link {
+  @apply text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-400 font-medium transition-colors;
 }

@@ -15,11 +15,9 @@ export default function ProfileImage() {
   }
 
   return (
-    <Image
+    <img
       src="/profile.jpg"
       alt="Sanjay Anasuri"
-      width={160}
-      height={160}
       className="w-full h-full object-cover"
       onError={() => setImageError(true)}
     />

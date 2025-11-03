@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="mx-auto max-w-4xl px-6 sm:px-8">
           <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-zinc-200/50 -mx-6 sm:-mx-8 px-6 sm:px-8">
             <nav className="flex items-center justify-between py-4">
-              <a href="/" className="font-semibold text-lg text-zinc-900 hover:text-zinc-700 transition-colors">Sanjay</a>
+              <a href="/" className="font-semibold text-lg text-zinc-900 hover:text-zinc-700 transition-colors">Sanjay Portfolio</a>
               <ul className="flex gap-8 text-sm text-zinc-600">
                 <li><a className="hover:text-zinc-900 transition-colors" href="/posts">Posts</a></li>
                 <li><a className="hover:text-zinc-900 transition-colors" href="/gallery">Gallery</a></li>

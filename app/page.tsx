@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <div className="space-y-24">
       {/* Hero / Profile Section */}
-      <section className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+      <section className="flex flex-col sm:flex-row items-center sm:items-center gap-8 text-center sm:text-left">
         <div className="flex-shrink-0">
           <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden bg-gradient-to-br from-zinc-200 to-zinc-300 border-4 border-white shadow-lg">
             <ProfileImage />
@@ -23,12 +23,11 @@ export default async function Home() {
             <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 mb-3">
               Sanjay Anasuri
             </h1>
-            <p className="text-lg text-zinc-600 leading-relaxed max-w-2xl">
+            <p className="text-lg text-zinc-600 leading-relaxed max-w-2xl mx-auto sm:mx-0">
               Hello! I'm Sanjay. I'm in my final year of undergrad at Purdue University,
               where I'm pursuing a B.S in Data Science. I'm interested in the intersection between
               technology and human-centered design. I write about my experiences and learnings.
               Three words to describe me are: curious, creative, and empathetic. 
-              
             </p>
           </div>
         </div>
