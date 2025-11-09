@@ -42,3 +42,34 @@ export function mapGalleryItem(page: any) {
     date?: string;
   };
 }
+
+function url(prop: any): string | undefined {
+  try {
+    return prop?.url || prop?.rich_text?.[0]?.plain_text || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export function mapForFriendsItem(page: any) {
+  const p = page.properties || {};
+  return {
+    id: page.id,
+    title: text(p.Title) || text(p.Name) || "Untitled",
+    type: p.Type?.select?.name || p.Category?.select?.name || "Other",
+    url: url(p.URL) || url(p.Link) || url(p.Spotify) || url(p.YouTube) || undefined,
+    description: text(p.Description) || text(p.Why) || text(p.Notes) || undefined,
+    image: fileUrl(p.Image) || fileUrl(p.Cover) || fileUrl(p.Photo) || undefined,
+    date: p.Date?.date?.start || p.Created?.created_time || undefined,
+    tags: (p.Tags?.multi_select || []).map((t: any) => t.name),
+  } as {
+    id: string;
+    title: string;
+    type: string;
+    url?: string;
+    description?: string;
+    image?: string;
+    date?: string;
+    tags?: string[];
+  };
+}

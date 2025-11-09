@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <ul className="flex gap-8 text-sm text-zinc-600">
                 <li><a className="hover:text-zinc-900 transition-colors" href="/posts">Posts</a></li>
                 <li><a className="hover:text-zinc-900 transition-colors" href="/gallery">Gallery</a></li>
+                <li><a className="hover:text-zinc-900 transition-colors" href="/for-friends">For Friends</a></li>
                 <li><a className="hover:text-zinc-900 transition-colors" href="/for-employers">For Employers</a></li>
                 <li><a className="hover:text-zinc-900 transition-colors" href="/contact">Contact</a></li>
               </ul>

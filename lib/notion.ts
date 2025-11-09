@@ -27,6 +27,26 @@ export async function listGalleryItems({ limit = 100 }: NotionListOptions = {}) 
   }
 }
 
+// For Friends functions
+export async function listForFriendsItems({ limit = 100 }: NotionListOptions = {}) {
+  const db = process.env.NOTION_FOR_FRIENDS_DB_ID;
+  if (!db) {
+    console.warn("NOTION_FOR_FRIENDS_DB_ID not set, returning empty list");
+    return [];
+  }
+  try {
+    const res = await notion.databases.query({
+      database_id: db,
+      page_size: limit,
+      sorts: [{ property: "Date", direction: "descending" }], // Newest first
+    });
+    return res.results as any[];
+  } catch (error: any) {
+    console.error("Error fetching For Friends items:", error);
+    return [];
+  }
+}
+
 export async function listPosts({ limit = 50 }: NotionListOptions) {
   const db = process.env.NOTION_POSTS_DB_ID!;
   try {
