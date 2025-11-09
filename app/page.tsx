@@ -1,14 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
-import { listPosts } from "@/lib/notion";
-import { mapPostMeta } from "@/lib/mapNotion";
+import { listPosts, listGalleryItems } from "@/lib/notion";
+import { mapPostMeta, mapGalleryItem } from "@/lib/mapNotion";
 import ProfileImage from "@/components/ProfileImage";
+import GalleryCarousel from "@/components/GalleryCarousel";
 
 export const revalidate = 60; // ISR
 
 export default async function Home() {
   const raw = await listPosts({ limit: 6 });
   const posts = raw.map(mapPostMeta);
+  
+  // Ensure posts are sorted by date (newest first)
+  const sortedPosts = posts.sort((a, b) => {
+    if (!a.publishedAt && !b.publishedAt) return 0;
+    if (!a.publishedAt) return 1;
+    if (!b.publishedAt) return -1;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
+
+  // Get gallery items for carousel
+  const galleryRaw = await listGalleryItems({ limit: 20 });
+  const galleryItems = galleryRaw.map(mapGalleryItem).filter(item => item.image);
+
   return (
     <div className="space-y-24">
       {/* Hero / Profile Section */}
@@ -43,7 +57,7 @@ export default async function Home() {
         </div>
         
         <ul className="space-y-12">
-          {posts.map((p, index) => (
+          {sortedPosts.map((p, index) => (
             <li key={p.slug}>
               <Link 
                 href={`/posts/${encodeURIComponent(p.slug)}`}
@@ -95,13 +109,20 @@ export default async function Home() {
               </Link>
               
               {/* Separator line */}
-              {index < posts.length - 1 && (
+              {index < sortedPosts.length - 1 && (
                 <div className="mt-12 h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent"></div>
               )}
             </li>
           ))}
         </ul>
       </section>
+
+      {/* Gallery Carousel Section */}
+      {galleryItems.length > 0 && (
+        <section>
+          <GalleryCarousel items={galleryItems} />
+        </section>
+      )}
     </div>
   );
 }

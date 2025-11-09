@@ -2,6 +2,7 @@ import "react-notion-x/src/styles.css";
 import "prismjs/themes/prism.css"; // if you have code blocks in posts
 
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description: "Portfolio, posts, and artifacts",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className="min-h-screen bg-gradient-to-b from-zinc-50 to-white text-zinc-900 antialiased">
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <ul className="flex gap-8 text-sm text-zinc-600">
                 <li><a className="hover:text-zinc-900 transition-colors" href="/posts">Posts</a></li>
                 <li><a className="hover:text-zinc-900 transition-colors" href="/gallery">Gallery</a></li>
-                <li><a className="hover:text-zinc-900 transition-colors" href="/about">About</a></li>
+                <li><a className="hover:text-zinc-900 transition-colors" href="/for-employers">For Employers</a></li>
                 <li><a className="hover:text-zinc-900 transition-colors" href="/contact">Contact</a></li>
               </ul>
             </nav>

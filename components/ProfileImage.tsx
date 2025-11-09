@@ -19,6 +19,7 @@ export default function ProfileImage() {
       src="/profile.jpg"
       alt="Sanjay Anasuri"
       className="w-full h-full object-cover"
+      style={{ objectPosition: 'center 20%' }}
       onError={() => setImageError(true)}
     />
   );

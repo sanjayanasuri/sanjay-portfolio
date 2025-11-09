@@ -1,10 +1,10 @@
 import { listPosts } from "@/lib/notion";
 import { mapPostMeta } from "@/lib/mapNotion";
-import PostsPageClient from "./page-client";
+import PostsPage from "./page";
 
 export const revalidate = 60;
 
-export default async function PostsPage() {
+export default async function PostsPageWrapper() {
   const raw = await listPosts({});
   const posts = raw.map(mapPostMeta);
   
@@ -16,5 +16,6 @@ export default async function PostsPage() {
     return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
   });
 
-  return <PostsPageClient initialPosts={sortedPosts} />;
+  return <PostsPage initialPosts={sortedPosts} />;
 }
+

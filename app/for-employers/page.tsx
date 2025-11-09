@@ -1,8 +1,8 @@
-export default function AboutPage() {
+export default function ForEmployersPage() {
   return (
     <section className="max-w-3xl mx-auto text-center space-y-8">
       <div>
-        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 mb-6">About</h1>
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 mb-6">For Employers</h1>
         <div className="prose prose-lg prose-zinc mx-auto text-left max-w-2xl">
           <p className="text-lg text-zinc-700 leading-relaxed mb-4">
             Hello! I'm Sanjay. I'm in my final year of undergrad at Purdue University,
