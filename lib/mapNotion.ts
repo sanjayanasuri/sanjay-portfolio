@@ -26,9 +26,9 @@ export function mapGalleryItem(page: any) {
   const p = page.properties || {};
   return {
     id: page.id,
-    image: fileUrl(p.Image) || fileUrl(p.Photo) || fileUrl(p.Picture) || fileUrl(p.Cover),
+    image: fileUrl(p.Media) || fileUrl(p.Image) || fileUrl(p.Photo) || fileUrl(p.Picture) || fileUrl(p.Cover),
     title: text(p.Title) || text(p.Name) || text(p.Caption) || undefined,
-    caption: text(p.Caption) || text(p.Description) || undefined,
+    caption: text(p.Caption) || text(p.Description) || text(p.Alt) || undefined,
     category: p.Category?.select?.name || p.Category?.multi_select?.[0]?.name || undefined,
     tags: (p.Tags?.multi_select || []).map((t: any) => t.name),
   } as {
