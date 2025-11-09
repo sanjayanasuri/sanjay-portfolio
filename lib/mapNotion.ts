@@ -31,6 +31,7 @@ export function mapGalleryItem(page: any) {
     caption: text(p.Caption) || text(p.Description) || text(p.Alt) || undefined,
     category: p.Category?.select?.name || p.Category?.multi_select?.[0]?.name || undefined,
     tags: (p.Tags?.multi_select || []).map((t: any) => t.name),
+    date: p.Date?.date?.start || p.Created?.created_time || p.PublishedAt?.date?.start || undefined,
   } as {
     id: string;
     image?: string;
@@ -38,5 +39,6 @@ export function mapGalleryItem(page: any) {
     caption?: string;
     category?: string;
     tags?: string[];
+    date?: string;
   };
 }
