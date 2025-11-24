@@ -38,10 +38,9 @@ export default async function Home() {
               Sanjay Anasuri
             </h1>
             <p className="text-lg text-zinc-600 leading-relaxed max-w-2xl mx-auto sm:mx-0">
-              Hello! I'm Sanjay. I'm in my final year of undergrad at Purdue University,
-              where I'm pursuing a B.S in Data Science. I'm interested in the intersection between
-              technology and human-centered design. I write about my experiences and learnings.
-              Three words to describe me are: curious, creative, and empathetic. 
+              I'm interested in agent-to-agent frameworks and their application to automating tedious tasks. 
+              I believe in a future where agents can not just collaborate but autonomously self-heal and adapt.
+              I write about my experiences and learnings.
             </p>
           </div>
         </div>

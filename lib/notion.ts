@@ -35,14 +35,100 @@ export async function listForFriendsItems({ limit = 100 }: NotionListOptions = {
     return [];
   }
   try {
+    // Try with Date sort first (newest first)
     const res = await notion.databases.query({
       database_id: db,
       page_size: limit,
-      sorts: [{ property: "Date", direction: "descending" }], // Newest first
+      sorts: [{ property: "Date", direction: "descending" }],
     });
     return res.results as any[];
   } catch (error: any) {
-    console.error("Error fetching For Friends items:", error);
+    // If Date property doesn't exist, try without sort
+    if (error?.code === 'validation_error' && error?.message?.includes('Date')) {
+      console.log("Date property not found, fetching without sort");
+      try {
+        const res = await notion.databases.query({
+          database_id: db,
+          page_size: limit,
+        });
+        return res.results as any[];
+      } catch (fallbackError: any) {
+        console.error("Error fetching For Friends items (fallback):", {
+          message: fallbackError?.message,
+          code: fallbackError?.code,
+          status: fallbackError?.status,
+        });
+        return [];
+      }
+    }
+    // Log detailed error for other issues
+    console.error("Error fetching For Friends items:", {
+      message: error?.message,
+      code: error?.code,
+      status: error?.status,
+      databaseId: db,
+    });
+    return [];
+  }
+}
+
+// For Employers / Projects functions
+export async function listProjects({ limit = 100 }: NotionListOptions = {}) {
+  const db = process.env.NOTION_PROJECTS_DB_ID;
+  if (!db) {
+    console.warn("NOTION_PROJECTS_DB_ID not set, returning empty list");
+    return [];
+  }
+  try {
+    // First, try to get database schema to see what properties exist
+    try {
+      const dbInfo = await notion.databases.retrieve({ database_id: db });
+      console.log("[listProjects] Database properties:", Object.keys(dbInfo.properties || {}));
+    } catch (schemaError) {
+      // Ignore schema errors, just log
+      console.log("[listProjects] Could not retrieve database schema");
+    }
+    
+    // Try with Order sort first
+    try {
+      const res = await notion.databases.query({
+        database_id: db,
+        page_size: limit,
+        sorts: [{ property: "Order", direction: "ascending" }],
+      });
+      console.log(`[listProjects] Successfully fetched ${res.results.length} projects with Order sort`);
+      return res.results as any[];
+    } catch (orderError: any) {
+      // If Order property doesn't exist, try without sort
+      if (orderError?.code === 'validation_error' && orderError?.message?.includes('Order')) {
+        console.log("[listProjects] Order property not found, fetching without sort");
+        const res = await notion.databases.query({
+          database_id: db,
+          page_size: limit,
+        });
+        console.log(`[listProjects] Successfully fetched ${res.results.length} projects without sort`);
+        return res.results as any[];
+      }
+      throw orderError;
+    }
+  } catch (error: any) {
+    // Log detailed error
+    console.error("[listProjects] Error fetching Projects:", {
+      message: error?.message,
+      code: error?.code,
+      status: error?.status,
+      statusCode: error?.statusCode,
+      databaseId: db,
+    });
+    
+    // Check if it's a permission/access error
+    if (error?.code === 'object_not_found' || error?.status === 404) {
+      console.error("[listProjects] Database not found or integration doesn't have access. Make sure:");
+      console.error("  1. Database ID is correct:", db);
+      console.error("  2. Database is shared with your Notion integration");
+      console.error("  3. Integration has proper permissions");
+    }
+    
     return [];
   }
 }
