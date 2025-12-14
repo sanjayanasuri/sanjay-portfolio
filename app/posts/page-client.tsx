@@ -75,7 +75,7 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
   return (
     <section className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <h1 className="text-4xl font-semibold text-zinc-900">Posts</h1>
+        <h1 className="text-4xl font-semibold text-ink">Posts</h1>
         
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row gap-4">
@@ -85,7 +85,7 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
             placeholder="Search posts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent text-sm"
+            className="px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm glass-panel"
           />
           
           {/* Year Filter */}
@@ -95,7 +95,7 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
               setSelectedYear(e.target.value);
               setSelectedMonth("all"); // Reset month when year changes
             }}
-            className="px-4 py-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent text-sm bg-white"
+            className="px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm glass-panel"
           >
             <option value="all">All Years</option>
             {years.map((year) => (
@@ -109,7 +109,7 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="px-4 py-2 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent text-sm bg-white"
+            className="px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm glass-panel"
             disabled={selectedYear === "all"}
           >
             <option value="all">All Months</option>
@@ -129,7 +129,7 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
 
       {/* Results count */}
       {filteredPosts.length !== initialPosts.length && (
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-muted">
           Showing {filteredPosts.length} of {initialPosts.length} posts
         </p>
       )}
@@ -137,7 +137,7 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
       {/* Posts List */}
       {filteredPosts.length === 0 ? (
         <div className="py-12 text-center">
-          <p className="text-zinc-500">No posts found matching your criteria.</p>
+          <p className="text-muted">No posts found matching your criteria.</p>
         </div>
       ) : (
         <ul className="space-y-3">
@@ -145,20 +145,20 @@ export default function PostsPageClient({ initialPosts }: { initialPosts: Post[]
             <li key={p.slug}>
               <Link
                 href={`/posts/${encodeURIComponent(p.slug)}`}
-                className="group flex items-start justify-between p-4 rounded-xl hover:bg-white hover:shadow-sm transition-all duration-200 border border-transparent hover:border-zinc-200/60"
+                className="group flex items-start justify-between p-4 rounded-xl glass-panel hover:shadow-accent transition-all duration-200 border border-border hover:border-accent"
               >
                 <div className="flex-1">
-                  <h2 className="font-medium text-zinc-900 group-hover:text-zinc-700 transition-colors">
+                  <h2 className="font-medium text-ink group-hover:text-accent transition-colors">
                     {p.title}
                   </h2>
                   {p.excerpt && (
-                    <p className="text-sm text-zinc-600 mt-1 line-clamp-1">
+                    <p className="text-sm text-muted mt-1 line-clamp-1">
                       {p.excerpt}
                     </p>
                   )}
                 </div>
                 {p.publishedAt && (
-                  <span className="ml-4 text-xs text-zinc-500 whitespace-nowrap">
+                  <span className="ml-4 text-xs text-muted uppercase tracking-wider whitespace-nowrap">
                     {new Date(p.publishedAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',

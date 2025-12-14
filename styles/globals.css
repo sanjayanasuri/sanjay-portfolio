@@ -1,6 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Colors */
+  --ink: #0f172a;
+  --muted: #6b7280;
+  --surface: #ffffff;
+  --border: #d8e2f1;
+  --accent: #118ab2;
+  --accent-2: #ef476f;
+  --panel: rgba(255, 255, 255, 0.82);
+  --shadow: 0 18px 60px rgba(15, 23, 42, 0.12);
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+}
+
+@layer base {
+  body {
+    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+    color: #0f172a;
+    background: linear-gradient(180deg, #fdf7ec 0%, #eef6ff 60%, #f7f9fb 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 
 /* Hide scrollbar for gallery carousel */
 .scrollbar-hide {
@@ -11,57 +48,103 @@
   display: none;
 }
 
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(17, 138, 178, 0.12);
+}
+
+/* Pills/Badges */
+.pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #d8e2f1;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.pill--active {
+  border-color: #118ab2;
+  color: #118ab2;
+  box-shadow: 0 8px 20px rgba(17, 138, 178, 0.22);
+}
+
+.pill--ghost {
+  background: rgba(17, 138, 178, 0.08);
+  border-color: rgba(17, 138, 178, 0.12);
+}
+
+/* Button styles */
+.btn-gradient {
+  background: linear-gradient(120deg, #118ab2, #00b4d8);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(17, 138, 178, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-1px);
+}
+
 .prose {
-  @apply text-zinc-700 leading-relaxed;
+  @apply text-muted leading-relaxed;
 }
 
 .prose h1 {
-  @apply text-zinc-900 font-bold text-3xl mb-6 mt-8;
+  @apply text-ink font-bold text-3xl mb-6 mt-8;
 }
 
 .prose h2 {
-  @apply text-zinc-900 font-semibold text-2xl mb-4 mt-8 border-b border-zinc-200 pb-2;
+  @apply text-ink font-semibold text-2xl mb-4 mt-8 border-b border-border pb-2;
 }
 
 .prose h3 {
-  @apply text-zinc-900 font-semibold text-xl mb-3 mt-6;
+  @apply text-ink font-semibold text-xl mb-3 mt-6;
 }
 
 .prose h4 {
-  @apply text-zinc-900 font-semibold text-lg mb-2 mt-4;
+  @apply text-ink font-semibold text-lg mb-2 mt-4;
 }
 
 .prose p {
-  @apply mb-4 leading-relaxed text-zinc-700;
+  @apply mb-4 leading-relaxed text-muted;
 }
 
 .prose a {
-  @apply text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-400 transition-colors font-medium;
+  @apply text-accent underline decoration-accent/30 hover:decoration-accent transition-colors font-medium;
 }
 
 .prose img {
-  @apply rounded-xl shadow-lg my-6;
+  @apply rounded-xl shadow-brain-sm my-6;
   border-radius: 0.75rem;
 }
 
 .prose code {
-  @apply bg-zinc-100 text-zinc-900 px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply bg-surface border border-border text-ink px-1.5 py-0.5 rounded text-sm font-mono;
 }
 
 .prose pre {
-  @apply bg-zinc-900 text-zinc-100 rounded-xl p-6 overflow-x-auto shadow-lg my-6;
+  @apply bg-ink text-surface rounded-xl p-6 overflow-x-auto shadow-brain-sm my-6;
 }
 
 .prose pre code {
-  @apply bg-transparent text-zinc-100 p-0;
+  @apply bg-transparent text-surface p-0;
 }
 
 .prose blockquote {
-  @apply border-l-4 border-zinc-300 pl-6 italic text-zinc-600 my-6 bg-zinc-50 py-4 rounded-r-lg;
+  @apply border-l-4 border-accent pl-6 italic text-muted my-6 bg-surface/50 py-4 rounded-r-lg;
 }
 
 .prose hr {
-  @apply border-zinc-200 my-8;
+  @apply border-border my-8;
 }
 
 .prose ul,
@@ -70,24 +153,24 @@
 }
 
 .prose li {
-  @apply text-zinc-700;
+  @apply text-muted;
 }
 
 .prose strong {
-  @apply font-semibold text-zinc-900;
+  @apply font-semibold text-ink;
 }
 
 .prose em {
-  @apply italic text-zinc-600;
+  @apply italic text-muted;
 }
 
-/* Custom Notion styling - Make it more exciting */
+/* Custom Notion styling - Brain Web Design System */
 .notion-page {
   @apply max-w-none;
 }
 
 .notion-text {
-  @apply text-zinc-700 leading-relaxed text-base;
+  @apply text-muted leading-relaxed text-base;
 }
 
 .notion-header {
@@ -96,27 +179,27 @@
 
 /* Enhanced Notion blocks */
 .notion-h {
-  @apply font-bold text-zinc-900;
+  @apply font-bold text-ink;
 }
 
 .notion-h1 {
-  @apply text-3xl font-bold text-zinc-900 mt-10 mb-6 pb-3 border-b border-zinc-200;
+  @apply text-3xl font-bold text-ink mt-10 mb-6 pb-3 border-b border-border;
 }
 
 .notion-h2 {
-  @apply text-2xl font-semibold text-zinc-900 mt-8 mb-4;
+  @apply text-2xl font-semibold text-ink mt-8 mb-4;
 }
 
 .notion-h3 {
-  @apply text-xl font-semibold text-zinc-900 mt-6 mb-3;
+  @apply text-xl font-semibold text-ink mt-6 mb-3;
 }
 
 .notion-image {
-  @apply rounded-2xl shadow-xl my-8;
+  @apply rounded-2xl shadow-brain-sm my-8;
 }
 
 .notion-callout {
-  @apply rounded-xl p-6 my-6 border-l-4 bg-zinc-50 border-zinc-400;
+  @apply rounded-xl p-6 my-6 border-l-4 glass-panel border-accent;
 }
 
 .notion-list {
@@ -124,29 +207,29 @@
 }
 
 .notion-list-item {
-  @apply text-zinc-700 leading-relaxed;
+  @apply text-muted leading-relaxed;
 }
 
 /* Code blocks */
 .notion-code {
-  @apply bg-zinc-900 text-zinc-100 rounded-xl p-6 shadow-xl my-6 overflow-x-auto;
+  @apply bg-ink text-surface rounded-xl p-6 shadow-brain-sm my-6 overflow-x-auto;
 }
 
 .notion-inline-code {
-  @apply bg-zinc-100 text-zinc-900 px-2 py-1 rounded text-sm font-mono;
+  @apply bg-surface border border-border text-ink px-2 py-1 rounded text-sm font-mono;
 }
 
 /* Quotes */
 .notion-quote {
-  @apply border-l-4 border-zinc-400 pl-6 italic text-zinc-600 my-6 bg-zinc-50 py-4 rounded-r-lg;
+  @apply border-l-4 border-accent pl-6 italic text-muted my-6 glass-panel py-4 rounded-r-lg;
 }
 
 /* Dividers */
 .notion-hr {
-  @apply border-zinc-200 my-10;
+  @apply border-border my-10;
 }
 
 /* Links */
 .notion-link {
-  @apply text-zinc-900 underline decoration-zinc-300 hover:decoration-zinc-400 font-medium transition-colors;
+  @apply text-accent underline decoration-accent/30 hover:decoration-accent font-medium transition-colors;
 }

@@ -51,11 +51,11 @@ export default function GalleryCarousel({ items }: { items: GalleryItem[] }) {
   return (
     <section className="relative w-full mt-24">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-zinc-900">Gallery</h2>
+        <h2 className="text-2xl font-semibold text-ink">Gallery</h2>
         <div className="flex gap-2">
           <button
             onClick={() => scroll("left")}
-            className="p-2 rounded-full hover:bg-zinc-100 transition-colors"
+            className="p-2 rounded-full glass-panel hover:shadow-accent transition-all text-ink hover:text-accent"
             aria-label="Scroll left"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +64,7 @@ export default function GalleryCarousel({ items }: { items: GalleryItem[] }) {
           </button>
           <button
             onClick={() => scroll("right")}
-            className="p-2 rounded-full hover:bg-zinc-100 transition-colors"
+            className="p-2 rounded-full glass-panel hover:shadow-accent transition-all text-ink hover:text-accent"
             aria-label="Scroll right"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +82,7 @@ export default function GalleryCarousel({ items }: { items: GalleryItem[] }) {
         {images.map((item) => (
           <div
             key={item.id}
-            className="flex-shrink-0 w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 relative rounded-lg overflow-hidden bg-zinc-100 cursor-pointer group"
+            className="flex-shrink-0 w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 relative rounded-lg overflow-hidden glass-panel cursor-pointer group shadow-brain-sm"
             onClick={() => handleImageClick(item)}
           >
             {item.image && (

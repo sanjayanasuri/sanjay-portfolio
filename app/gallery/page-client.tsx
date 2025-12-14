@@ -62,8 +62,8 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
   return (
     <section className="space-y-12">
       <div className="text-center">
-        <h1 className="text-4xl font-semibold mb-4 text-zinc-900">Gallery</h1>
-        <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+        <h1 className="text-4xl font-semibold mb-4 text-ink">Gallery</h1>
+        <p className="text-lg text-muted max-w-2xl mx-auto">
           A collection of moments, projects, and visual experiments.
         </p>
       </div>
@@ -73,10 +73,10 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setSelectedTag(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`pill ${
               selectedTag === null
-                ? "bg-zinc-900 text-white"
-                : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                ? "pill--active"
+                : ""
             }`}
           >
             All
@@ -85,10 +85,10 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
             <button
               key={tag}
               onClick={() => setSelectedTag(tag)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`pill ${
                 selectedTag === tag
-                  ? "bg-zinc-900 text-white"
-                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                  ? "pill--active"
+                  : ""
               }`}
             >
               {tag}
@@ -99,7 +99,7 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
 
       {/* Results count */}
       {selectedTag && (
-        <p className="text-sm text-zinc-500 text-center">
+        <p className="text-sm text-muted text-center">
           Showing {filteredItems.length} {filteredItems.length === 1 ? "image" : "images"} tagged "{selectedTag}"
         </p>
       )}
@@ -107,12 +107,12 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
       {/* Gallery Grid */}
       {filteredItems.length === 0 ? (
         <div className="py-16 text-center">
-          <p className="text-zinc-500 mb-4">
+          <p className="text-muted mb-4">
             {selectedTag ? `No images found with tag "${selectedTag}"` : "No images in gallery yet."}
           </p>
           {!selectedTag && (
-            <p className="text-sm text-zinc-400">
-              Add <code className="bg-zinc-100 px-2 py-1 rounded">NOTION_GALLERY_DB_ID</code> to your <code className="bg-zinc-100 px-2 py-1 rounded">.env.local</code> and create a Gallery database in Notion.
+            <p className="text-sm text-muted">
+              Add <code className="glass-panel px-2 py-1 rounded font-mono text-xs">NOTION_GALLERY_DB_ID</code> to your <code className="glass-panel px-2 py-1 rounded font-mono text-xs">.env.local</code> and create a Gallery database in Notion.
             </p>
           )}
         </div>
@@ -121,7 +121,7 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              className="group relative aspect-square overflow-hidden rounded-xl bg-zinc-100 cursor-pointer"
+              className="group relative aspect-square overflow-hidden rounded-xl glass-panel cursor-pointer shadow-brain-sm"
               onClick={() => handleImageClick(item)}
             >
               {item.image && (

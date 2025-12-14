@@ -52,12 +52,12 @@ export default async function PostPage({ params }: { params: { slug: string } })
 
   return (
     <article className="max-w-3xl mx-auto">
-      <header className="mb-12 pb-8 border-b border-zinc-200/50 text-center">
-        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 mb-4">
+      <header className="mb-12 pb-8 border-b border-border/50 text-center">
+        <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink mb-4">
           {meta.title}
         </h1>
         {meta.publishedAt && (
-          <p className="text-sm text-zinc-500">
+          <p className="text-xs text-muted uppercase tracking-wider">
             {new Date(meta.publishedAt).toLocaleDateString('en-US', { 
               month: 'long', 
               day: 'numeric', 
@@ -66,7 +66,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
           </p>
         )}
       </header>
-      <div className="prose prose-zinc prose-lg max-w-none prose-headings:font-semibold prose-headings:text-zinc-900 prose-p:text-zinc-700 prose-p:leading-relaxed prose-a:text-zinc-900 prose-strong:text-zinc-900 prose-img:rounded-2xl prose-img:shadow-xl prose-pre:shadow-xl prose-blockquote:bg-zinc-50 prose-blockquote:border-l-zinc-400">
+      <div className="prose prose-lg max-w-none">
         <NotionContent key={page.id} recordMap={recordMap} />
       </div>
     </article>

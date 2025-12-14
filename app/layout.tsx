@@ -13,22 +13,22 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gradient-to-b from-zinc-50 to-white text-zinc-900 antialiased">
+      <body className="min-h-screen antialiased">
         <div className="mx-auto max-w-4xl px-6 sm:px-8">
-          <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-zinc-200/50 -mx-6 sm:-mx-8 px-6 sm:px-8">
+          <header className="sticky top-0 z-50 glass-panel border-b border-border/50 -mx-6 sm:-mx-8 px-6 sm:px-8 shadow-brain-sm">
             <nav className="flex items-center justify-between py-4">
-              <a href="/" className="font-semibold text-lg text-zinc-900 hover:text-zinc-700 transition-colors">Sanjay Portfolio</a>
-              <ul className="flex gap-8 text-sm text-zinc-600">
-                <li><a className="hover:text-zinc-900 transition-colors" href="/posts">Posts</a></li>
-                <li><a className="hover:text-zinc-900 transition-colors" href="/gallery">Gallery</a></li>
-                <li><a className="hover:text-zinc-900 transition-colors" href="/for-friends">For Friends</a></li>
-                <li><a className="hover:text-zinc-900 transition-colors" href="/for-employers">For Employers</a></li>
-                <li><a className="hover:text-zinc-900 transition-colors" href="/contact">Contact</a></li>
+              <a href="/" className="font-semibold text-lg text-ink hover:text-accent transition-colors">Sanjay Anasuri</a>
+              <ul className="flex gap-8 text-sm text-muted">
+                <li><a className="hover:text-accent transition-colors font-medium" href="/posts">Posts</a></li>
+                <li><a className="hover:text-accent transition-colors font-medium" href="/gallery">Gallery</a></li>
+                <li><a className="hover:text-accent transition-colors font-medium" href="/for-friends">For Friends</a></li>
+                <li><a className="hover:text-accent transition-colors font-medium" href="/for-employers">For Employers</a></li>
+                <li><a className="hover:text-accent transition-colors font-medium" href="/contact">Contact</a></li>
               </ul>
             </nav>
           </header>
           <main className="py-12 pb-20">{children}</main>
-          <footer className="border-t border-zinc-200/50 py-12 text-sm text-zinc-500 text-center">
+          <footer className="border-t border-border/50 py-12 text-sm text-muted text-center">
             © {new Date().getFullYear()} Sanjay Anasuri
           </footer>
         </div>
