@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
-    "next": "14.2.5",
+    "next": "14.2.35",
     "notion-client": "^7.7.1",
     "notion-utils": "^7.7.1",
     "prismjs": "^1.30.0",
