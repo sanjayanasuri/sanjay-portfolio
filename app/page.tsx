@@ -13,8 +13,8 @@ export default async function Home() {
   
   // Find graph theory post (case-insensitive search)
   const graphTheoryPost = posts.find(p => 
-    p.title.toLowerCase().includes('graph') || 
-    p.tags?.some(tag => tag.toLowerCase().includes('graph'))
+    p.title.toLowerCase().includes('graph theory') || 
+    p.tags?.some(tag => tag.toLowerCase().includes('graph theory'))
   );
 
   // Get gallery items for carousel
