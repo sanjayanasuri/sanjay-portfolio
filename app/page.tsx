@@ -51,7 +51,7 @@ export default async function Home() {
           <div className="h-px w-16 bg-gradient-to-r from-accent to-accent-2"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
           {/* Graph Theory Post Block */}
           {graphTheoryPost && (
             <Link 
