@@ -8,16 +8,14 @@ import GalleryCarousel from "@/components/GalleryCarousel";
 export const revalidate = 60; // ISR
 
 export default async function Home() {
-  const raw = await listPosts({ limit: 6 });
+  const raw = await listPosts({ limit: 50 });
   const posts = raw.map(mapPostMeta);
   
-  // Ensure posts are sorted by date (newest first)
-  const sortedPosts = posts.sort((a, b) => {
-    if (!a.publishedAt && !b.publishedAt) return 0;
-    if (!a.publishedAt) return 1;
-    if (!b.publishedAt) return -1;
-    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-  });
+  // Find graph theory post (case-insensitive search)
+  const graphTheoryPost = posts.find(p => 
+    p.title.toLowerCase().includes('graph') || 
+    p.tags?.some(tag => tag.toLowerCase().includes('graph'))
+  );
 
   // Get gallery items for carousel
   const galleryRaw = await listGalleryItems({ limit: 20 });
@@ -44,7 +42,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Posts Section */}
+      {/* Featured Projects Section */}
       <section className="space-y-8">
         <div className="space-y-2">
           <p className="text-xs font-medium text-muted uppercase tracking-wider letter-spacing-[0.08em]">
@@ -53,65 +51,99 @@ export default async function Home() {
           <div className="h-px w-16 bg-gradient-to-r from-accent to-accent-2"></div>
         </div>
         
-        <ul className="space-y-12">
-          {sortedPosts.map((p, index) => (
-            <li key={p.slug}>
-              <Link 
-                href={`/posts/${encodeURIComponent(p.slug)}`}
-                className="group block"
-              >
-                <article className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
-                  {/* Image on left (or top on mobile) */}
-                  {p.cover && (
-                    <div className={`flex-shrink-0 w-full sm:w-64 ${index % 2 === 1 ? 'sm:order-2' : ''}`}>
-                      <div className="relative aspect-[16/10] overflow-hidden rounded-xl glass-panel shadow-brain-sm">
-                        <Image
-                          src={p.cover}
-                          alt={p.title}
-                          width={600}
-                          height={375}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Content */}
-                  <div className={`flex-1 min-w-0 ${index % 2 === 1 ? 'sm:order-1' : ''}`}>
-                    {p.publishedAt && (
-                      <time className="text-xs text-muted mb-2 block uppercase tracking-wider">
-                        {new Date(p.publishedAt).toLocaleDateString('en-US', { 
-                          month: 'long', 
-                          day: 'numeric', 
-                          year: 'numeric' 
-                        })}
-                      </time>
-                    )}
-                    <h2 className="text-2xl sm:text-3xl font-semibold text-ink mb-3 group-hover:text-accent transition-colors leading-tight">
-                      {p.title}
-                    </h2>
-                    {p.excerpt && (
-                      <p className="text-base text-muted leading-relaxed line-clamp-3">
-                        {p.excerpt}
-                      </p>
-                    )}
-                    <div className="mt-4 inline-flex items-center text-sm font-medium text-accent group-hover:text-accent-2 transition-colors">
-                      Read more
-                      <svg className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Graph Theory Post Block */}
+          {graphTheoryPost && (
+            <Link 
+              href={`/posts/${encodeURIComponent(graphTheoryPost.slug)}`}
+              className="group block"
+            >
+              <div className="glass-panel rounded-2xl overflow-hidden shadow-brain hover:shadow-accent-lg transition-all duration-300 border border-border hover:border-accent h-full">
+                {graphTheoryPost.cover && (
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={graphTheoryPost.cover}
+                      alt={graphTheoryPost.title}
+                      width={600}
+                      height={375}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
-                </article>
-              </Link>
-              
-              {/* Separator line */}
-              {index < sortedPosts.length - 1 && (
-                <div className="mt-12 h-px bg-gradient-to-r from-transparent via-border to-transparent"></div>
-              )}
-            </li>
-          ))}
-        </ul>
+                )}
+                <div className="p-6 space-y-3">
+                  <h2 className="text-2xl font-semibold text-ink group-hover:text-accent transition-colors">
+                    {graphTheoryPost.title}
+                  </h2>
+                  {graphTheoryPost.excerpt && (
+                    <p className="text-muted leading-relaxed line-clamp-3">
+                      {graphTheoryPost.excerpt}
+                    </p>
+                  )}
+                  <div className="inline-flex items-center text-sm font-medium text-accent group-hover:text-accent-2 transition-colors">
+                    Read post
+                    <svg className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          )}
+
+          {/* Brain Web Project Block */}
+          <Link 
+            href="/for-employers"
+            className="group block"
+          >
+            <div className="glass-panel rounded-2xl overflow-hidden shadow-brain hover:shadow-accent-lg transition-all duration-300 border border-border hover:border-accent h-full">
+              {/* Brain Web Preview Visual */}
+              <div className="relative h-48 bg-gradient-to-br from-accent/10 via-accent-2/10 to-accent/5 p-6 overflow-hidden">
+                <div className="relative w-full h-full">
+                  {/* Central Node */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-accent to-accent-2 shadow-accent flex items-center justify-center z-10">
+                    <span className="text-white font-bold text-xs">Brain</span>
+                  </div>
+                  
+                  {/* Connection Lines */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+                    <line x1="50%" y1="50%" x2="30%" y2="30%" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,3" className="text-accent/20" />
+                    <line x1="50%" y1="50%" x2="70%" y2="30%" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,3" className="text-accent/20" />
+                    <line x1="50%" y1="50%" x2="30%" y2="70%" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,3" className="text-accent/20" />
+                    <line x1="50%" y1="50%" x2="70%" y2="70%" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,3" className="text-accent/20" />
+                  </svg>
+                  
+                  {/* Surrounding Nodes */}
+                  <div className="absolute top-[30%] left-[30%] w-8 h-8 rounded-full glass-panel border border-accent/30 flex items-center justify-center shadow-brain-sm">
+                    <span className="text-[10px] font-semibold text-ink">AI</span>
+                  </div>
+                  <div className="absolute top-[30%] right-[30%] w-8 h-8 rounded-full glass-panel border border-accent/30 flex items-center justify-center shadow-brain-sm">
+                    <span className="text-[10px] font-semibold text-ink">Graph</span>
+                  </div>
+                  <div className="absolute top-[70%] left-[30%] w-8 h-8 rounded-full glass-panel border border-accent/30 flex items-center justify-center shadow-brain-sm">
+                    <span className="text-[10px] font-semibold text-ink">Knowledge</span>
+                  </div>
+                  <div className="absolute top-[70%] right-[30%] w-8 h-8 rounded-full glass-panel border border-accent/30 flex items-center justify-center shadow-brain-sm">
+                    <span className="text-[10px] font-semibold text-ink">Research</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 space-y-3">
+                <h2 className="text-2xl font-semibold text-ink group-hover:text-accent transition-colors">
+                  Brain Web
+                </h2>
+                <p className="text-muted leading-relaxed">
+                  An interactive knowledge graph platform that visualizes and connects concepts through an AI-powered interface. Build on your knowledge, identify gaps, and discover research opportunities.
+                </p>
+                <div className="inline-flex items-center text-sm font-medium text-accent group-hover:text-accent-2 transition-colors">
+                  Try demo
+                  <svg className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
       </section>
 
       {/* Gallery Carousel Section */}
