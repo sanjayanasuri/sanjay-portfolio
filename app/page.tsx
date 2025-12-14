@@ -35,10 +35,10 @@ export default async function Home() {
         <div className="flex-1 space-y-4">
           <div>
             <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink mb-3">
-              Hello! Welcome to my portfolio
+              Hello! 
             </h1>
             <p className="text-lg text-muted leading-relaxed max-w-2xl mx-auto sm:mx-0">
-              I'm Sanjay - a senior studying Data Science at Purdue University. 
+            Welcome to my portfolio. I'm Sanjay - a senior studying Data Science at Purdue University. I'm passionate about Agentic AI and how autonomous systems can collaborate and self-improve. I write about what I'm learning and build tools that make knowledge more accessible. 
             </p>
           </div>
         </div>
