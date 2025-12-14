@@ -51,16 +51,16 @@ export default async function Home() {
           <div className="h-px w-16 bg-gradient-to-r from-accent to-accent-2"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
           {/* Graph Theory Post Block */}
           {graphTheoryPost && (
             <Link 
               href={`/posts/${encodeURIComponent(graphTheoryPost.slug)}`}
               className="group block"
             >
-              <div className="glass-panel rounded-xl overflow-hidden shadow-brain hover:shadow-accent transition-all duration-300 border border-border hover:border-accent">
+              <div className="glass-panel rounded-xl overflow-hidden shadow-brain hover:shadow-accent transition-all duration-300 border border-border hover:border-accent h-full flex flex-col">
                 {graphTheoryPost.cover && (
-                  <div className="relative h-32 overflow-hidden">
+                  <div className="relative h-32 overflow-hidden flex-shrink-0">
                     <Image
                       src={graphTheoryPost.cover}
                       alt={graphTheoryPost.title}
@@ -70,11 +70,11 @@ export default async function Home() {
                     />
                   </div>
                 )}
-                <div className="p-4 space-y-2">
+                <div className="p-4 space-y-2 flex-1 flex flex-col">
                   <h2 className="text-xl font-semibold text-ink group-hover:text-accent transition-colors">
                     {graphTheoryPost.title}
                   </h2>
-                  <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                  <p className="text-sm text-muted leading-relaxed line-clamp-2 flex-1">
                     {graphTheoryPost.excerpt || "Exploring graph neural networks and their applications in knowledge representation and AI systems."}
                   </p>
                   <div className="inline-flex items-center text-xs font-medium text-accent group-hover:text-accent-2 transition-colors pt-1">
@@ -93,9 +93,9 @@ export default async function Home() {
             href="/for-employers"
             className="group block"
           >
-            <div className="glass-panel rounded-xl overflow-hidden shadow-brain hover:shadow-accent transition-all duration-300 border border-border hover:border-accent">
+            <div className="glass-panel rounded-xl overflow-hidden shadow-brain hover:shadow-accent transition-all duration-300 border border-border hover:border-accent h-full flex flex-col">
               {/* Brain Web Preview Visual */}
-              <div className="relative h-32 bg-gradient-to-br from-accent/10 via-accent-2/10 to-accent/5 p-4 overflow-hidden">
+              <div className="relative h-32 bg-gradient-to-br from-accent/10 via-accent-2/10 to-accent/5 p-4 overflow-hidden flex-shrink-0">
                 <div className="relative w-full h-full">
                   {/* Central Node */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-gradient-to-br from-accent to-accent-2 shadow-accent flex items-center justify-center z-10">
@@ -125,11 +125,11 @@ export default async function Home() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 space-y-2">
+              <div className="p-4 space-y-2 flex-1 flex flex-col">
                 <h2 className="text-xl font-semibold text-ink group-hover:text-accent transition-colors">
                   Brain Web
                 </h2>
-                <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                <p className="text-sm text-muted leading-relaxed line-clamp-2 flex-1">
                   An interactive knowledge graph platform that visualizes and connects concepts through an AI-powered interface. Build on your knowledge, identify gaps, and discover research opportunities.
                 </p>
                 <div className="inline-flex items-center text-xs font-medium text-accent group-hover:text-accent-2 transition-colors pt-1">
