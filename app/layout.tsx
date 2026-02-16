@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="space-y-1">
                 <p className="font-semibold text-ink">Sanjay Anasuri</p>
-                <p>© {new Date().getFullYear()} — Built with Next.js & Notion</p>
+                <p>© {new Date().getFullYear()}</p>
               </div>
               <div className="flex gap-6">
                 <a href="https://github.com" className="hover:text-accent font-medium">GitHub</a>

@@ -27,9 +27,14 @@ export default async function Home() {
       <section className="relative pt-12 sm:pt-20 pb-12 animate-reveal">
         <div className="max-w-3xl space-y-8">
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink">
-              Sanjay Anasuri
-            </h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-ink">
+                Sanjay Anasuri
+              </h1>
+              <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border grayscale shrink-0">
+                <ProfileImage />
+              </div>
+            </div>
             <p className="text-lg text-muted leading-relaxed">
               I'm a senior at Purdue studying Data Science. Currently focusing on autonomous systems and knowledge representation. I build tools to help organize and discover information.
             </p>
@@ -37,7 +42,7 @@ export default async function Home() {
           <div className="flex gap-8 text-sm font-medium">
             <Link href="/for-employers" className="text-ink hover:text-accent transition-colors">Projects</Link>
             <Link href="/posts" className="text-ink hover:text-accent transition-colors">Writing</Link>
-            <Link href="/gallery" className="text-ink hover:text-accent transition-colors">Visuals</Link>
+            <Link href="/gallery" className="text-ink hover:text-accent transition-colors">Gallery</Link>
           </div>
         </div>
       </section>
