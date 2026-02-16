@@ -35,7 +35,7 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
   // Helper to extract Spotify/YouTube embed info
   const getEmbedInfo = (url?: string) => {
     if (!url) return null;
-    
+
     // Spotify
     if (url.includes("open.spotify.com") || url.includes("spotify.com")) {
       const spotifyId = url.match(/spotify\.com\/(?:playlist|album|track)\/([a-zA-Z0-9]+)/)?.[1];
@@ -44,7 +44,7 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
         return { type: "spotify", id: spotifyId, spotifyType: type };
       }
     }
-    
+
     // YouTube
     if (url.includes("youtube.com") || url.includes("youtu.be")) {
       const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/)?.[1];
@@ -52,7 +52,7 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
         return { type: "youtube", id: videoId };
       }
     }
-    
+
     return { type: "link", url };
   };
 
@@ -78,24 +78,24 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
   };
 
   return (
-    <section className="space-y-12">
-      <div className="text-center">
-        <h1 className="text-4xl font-semibold mb-4 text-zinc-900">For Friends</h1>
-        <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-          Things I'm into, stuff I like, and recommendations for friends.
+    <section className="space-y-16 animate-reveal">
+      <div className="relative pt-12 text-center">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-accent-2/5 blur-[100px] rounded-full pointer-events-none" />
+        <h1 className="text-4xl font-semibold mb-6 text-ink tracking-tight relative">For Friends</h1>
+        <p className="text-lg text-muted max-w-2xl mx-auto leading-relaxed relative">
+          A curated collection of artifacts, resonance, and technical curiosities.
         </p>
       </div>
 
       {/* Type Filters */}
       {types.length > 0 && (
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div className="flex flex-wrap gap-2 justify-center relative z-10">
           <button
             onClick={() => setSelectedType(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              selectedType === null
-                ? "bg-zinc-900 text-white"
-                : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
-            }`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedType === null
+                ? "text-accent-2 bg-accent-2/5 shadow-sm"
+                : "text-muted hover:text-ink hover:bg-black/5"
+              }`}
           >
             All
           </button>
@@ -103,11 +103,10 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
             <button
               key={type}
               onClick={() => setSelectedType(type)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedType === type
-                  ? "bg-zinc-900 text-white"
-                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
-              }`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedType === type
+                  ? "text-accent-2 bg-accent-2/5 shadow-sm"
+                  : "text-muted hover:text-ink hover:bg-black/5"
+                }`}
             >
               {getTypeIcon(type)} {type}
             </button>
@@ -115,129 +114,119 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
         </div>
       )}
 
-      {/* Results count */}
-      {selectedType && (
-        <p className="text-sm text-zinc-500 text-center">
-          Showing {filteredItems.length} {filteredItems.length === 1 ? "item" : "items"} of type "{selectedType}"
-        </p>
-      )}
-
       {/* Items Grid */}
       {filteredItems.length === 0 ? (
-        <div className="py-16 text-center">
-          <p className="text-zinc-500 mb-4">
-            {selectedType ? `No items found of type "${selectedType}"` : "No items yet."}
+        <div className="py-24 text-center glass-panel rounded-3xl border-dashed border-border/40">
+          <p className="text-muted italic">
+            {selectedType ? `No resonance found for signal "${selectedType}"` : "The archive is currently empty."}
           </p>
-          {!selectedType && (
-            <p className="text-sm text-zinc-400">
-              Add <code className="bg-zinc-100 px-2 py-1 rounded">NOTION_FOR_FRIENDS_DB_ID</code> to your <code className="bg-zinc-100 px-2 py-1 rounded">.env.local</code> and create a "For Friends" database in Notion.
-            </p>
-          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item) => {
             const embedInfo = getEmbedInfo(item.url);
-            
+
             return (
               <div
                 key={item.id}
-                className="group bg-white border border-zinc-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                className="group relative flex flex-col glass-panel rounded-2xl overflow-hidden border-border/40 hover:shadow-brain-sm transition-all duration-500"
               >
+                <div className="absolute inset-0 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
+
                 {/* Image or Embed Preview */}
-                {item.image ? (
-                  <div className="relative w-full aspect-video overflow-hidden bg-zinc-100">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
-                ) : embedInfo?.type === "spotify" ? (
-                  <div className="w-full aspect-video bg-zinc-900">
-                    <iframe
-                      src={`https://open.spotify.com/embed/${embedInfo.spotifyType}/${embedInfo.id}?utm_source=generator&theme=0`}
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                      loading="lazy"
-                      className="w-full h-full"
-                    />
-                  </div>
-                ) : embedInfo?.type === "youtube" ? (
-                  <div className="relative w-full aspect-video bg-zinc-900">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${embedInfo.id}`}
-                      width="100%"
-                      height="100%"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="w-full h-full"
-                    />
-                  </div>
-                ) : null}
+                <div className="relative">
+                  {item.image ? (
+                    <div className="relative w-full aspect-video overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </div>
+                  ) : embedInfo?.type === "spotify" ? (
+                    <div className="w-full aspect-video bg-black/20">
+                      <iframe
+                        src={`https://open.spotify.com/embed/${embedInfo.spotifyType}/${embedInfo.id}?utm_source=generator&theme=0`}
+                        width="100%"
+                        height="100%"
+                        frameBorder="0"
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"
+                        className="w-full h-full"
+                      />
+                    </div>
+                  ) : embedInfo?.type === "youtube" ? (
+                    <div className="relative w-full aspect-video bg-black/20">
+                      <iframe
+                        src={`https://www.youtube.com/embed/${embedInfo.id}`}
+                        width="100%"
+                        height="100%"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full aspect-video bg-accent-2/5 flex items-center justify-center">
+                      <span className="text-4xl opacity-20">{getTypeIcon(item.type)}</span>
+                    </div>
+                  )}
+                </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-2">
+                <div className="p-6 flex-1 flex flex-col relative">
+                  <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl">{getTypeIcon(item.type)}</span>
-                      <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-accent-2/60 uppercase tracking-widest bg-accent-2/5 px-2 py-0.5 rounded border border-accent-2/10">
                         {item.type}
                       </span>
                     </div>
                     {item.date && (
-                      <time className="text-xs text-zinc-400">
+                      <time className="text-[10px] font-medium text-muted uppercase tracking-wider">
                         {new Date(item.date).toLocaleDateString('en-US', {
                           month: 'short',
-                          day: 'numeric',
+                          year: 'numeric',
                         })}
                       </time>
                     )}
                   </div>
 
-                  <h3 className="text-xl font-semibold text-zinc-900 mb-3 group-hover:text-zinc-700 transition-colors">
+                  <h3 className="text-xl font-semibold text-ink mb-3 group-hover:text-accent-2 transition-colors leading-tight">
                     {item.title}
                   </h3>
 
                   {item.description && (
-                    <p className="text-sm text-zinc-600 leading-relaxed mb-4 line-clamp-3">
+                    <p className="text-sm text-muted leading-relaxed mb-6 line-clamp-3">
                       {item.description}
                     </p>
                   )}
 
-                  {item.url && (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900 hover:text-zinc-700 transition-colors"
-                    >
-                      {embedInfo?.type === "spotify" ? "Listen on Spotify" :
-                       embedInfo?.type === "youtube" ? "Watch on YouTube" :
-                       "View Link"}
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  )}
+                  <div className="mt-auto pt-4 flex items-center justify-between">
+                    {item.url && (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-xs font-bold text-ink hover:text-accent-2 transition-colors uppercase tracking-widest"
+                      >
+                        {embedInfo?.type === "spotify" ? "Resonate on Spotify" :
+                          embedInfo?.type === "youtube" ? "Witness on YouTube" :
+                            "Sync Artifact"}
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </a>
+                    )}
 
-                  {item.tags && item.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-4">
-                      {item.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs bg-zinc-100 text-zinc-600 px-2 py-1 rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                    {item.tags && item.tags.length > 0 && (
+                      <div className="flex gap-1 overflow-hidden">
+                        <span className="text-[10px] text-muted whitespace-nowrap">#{item.tags[0]}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             );

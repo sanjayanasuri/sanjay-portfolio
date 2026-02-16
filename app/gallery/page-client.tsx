@@ -24,7 +24,7 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
   // Extract all unique tags and sort items by date (newest first)
   const { tags, sortedItems } = useMemo(() => {
     const tagSet = new Set<string>();
-    
+
     // Sort by date if available, otherwise keep original order
     const sorted = [...initialItems].sort((a, b) => {
       if (a.date && b.date) {
@@ -60,24 +60,24 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
   };
 
   return (
-    <section className="space-y-12">
-      <div className="text-center">
-        <h1 className="text-4xl font-semibold mb-4 text-ink">Gallery</h1>
-        <p className="text-lg text-muted max-w-2xl mx-auto">
-          A collection of moments, projects, and visual experiments.
+    <section className="space-y-16 animate-reveal">
+      <div className="relative pt-12 text-center">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-mint/5 blur-[100px] rounded-full pointer-events-none" />
+        <h1 className="text-4xl font-semibold mb-6 text-ink tracking-tight relative">Gallery</h1>
+        <p className="text-lg text-muted max-w-2xl mx-auto leading-relaxed relative">
+          Technical captures, visual artifacts, and moments from the field.
         </p>
       </div>
 
       {/* Tag Filters */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div className="flex flex-wrap gap-2 justify-center relative z-10">
           <button
             onClick={() => setSelectedTag(null)}
-            className={`pill ${
-              selectedTag === null
-                ? "pill--active"
-                : ""
-            }`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedTag === null
+                ? "text-mint bg-mint/5 shadow-sm"
+                : "text-muted hover:text-ink hover:bg-black/5"
+              }`}
           >
             All
           </button>
@@ -85,11 +85,10 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
             <button
               key={tag}
               onClick={() => setSelectedTag(tag)}
-              className={`pill ${
-                selectedTag === tag
-                  ? "pill--active"
-                  : ""
-              }`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedTag === tag
+                  ? "text-mint bg-mint/5 shadow-sm"
+                  : "text-muted hover:text-ink hover:bg-black/5"
+                }`}
             >
               {tag}
             </button>
@@ -97,31 +96,19 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
         </div>
       )}
 
-      {/* Results count */}
-      {selectedTag && (
-        <p className="text-sm text-muted text-center">
-          Showing {filteredItems.length} {filteredItems.length === 1 ? "image" : "images"} tagged "{selectedTag}"
-        </p>
-      )}
-
       {/* Gallery Grid */}
       {filteredItems.length === 0 ? (
-        <div className="py-16 text-center">
-          <p className="text-muted mb-4">
-            {selectedTag ? `No images found with tag "${selectedTag}"` : "No images in gallery yet."}
+        <div className="py-24 text-center glass-panel rounded-3xl border-dashed border-border/40">
+          <p className="text-muted italic">
+            {selectedTag ? `No artifact found with signature "${selectedTag}"` : "The archive is currently empty."}
           </p>
-          {!selectedTag && (
-            <p className="text-sm text-muted">
-              Add <code className="glass-panel px-2 py-1 rounded font-mono text-xs">NOTION_GALLERY_DB_ID</code> to your <code className="glass-panel px-2 py-1 rounded font-mono text-xs">.env.local</code> and create a Gallery database in Notion.
-            </p>
-          )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              className="group relative aspect-square overflow-hidden rounded-xl glass-panel cursor-pointer shadow-brain-sm"
+              className="group relative aspect-[4/5] overflow-hidden rounded-2xl glass-panel cursor-pointer border-border/40 transition-all duration-500 hover:shadow-mint-sm"
               onClick={() => handleImageClick(item)}
             >
               {item.image && (
@@ -129,34 +116,33 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
                   src={item.image}
                   alt={item.title || item.caption || "Gallery image"}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-80 group-hover:opacity-100"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               )}
-              {(item.title || item.caption || item.tags) && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    {item.title && (
-                      <h3 className="font-semibold mb-1">{item.title}</h3>
-                    )}
-                    {item.caption && (
-                      <p className="text-sm text-white/90 line-clamp-2 mb-2">{item.caption}</p>
-                    )}
-                    {item.tags && item.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {item.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-xs bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  {item.title && (
+                    <h3 className="text-white font-semibold text-lg mb-1">{item.title}</h3>
+                  )}
+                  {item.caption && (
+                    <p className="text-white/80 text-sm line-clamp-2">{item.caption}</p>
+                  )}
+                  {item.tags && item.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {item.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[10px] uppercase tracking-widest font-bold text-mint bg-mint/10 backdrop-blur-md px-2 py-0.5 rounded border border-mint/20"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
@@ -175,4 +161,3 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
     </section>
   );
 }
-
