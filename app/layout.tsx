@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "../styles/globals.css";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Sanjay Anasuri",
-  description: "Portfolio, posts, and artifacts",
+  title: "Sanjay Anasuri | Agentic AI & Knowledge Graphs",
+  description: "Portfolio and artifacts of Sanjay Anasuri, focused on autonomous systems and graph neural networks.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen antialiased">
-        <div className="mx-auto max-w-4xl px-6 sm:px-8">
-          <header className="sticky top-0 z-50 glass-panel border-b border-border/50 -mx-6 sm:-mx-8 px-6 sm:px-8 shadow-brain-sm">
-            <nav className="flex items-center justify-between py-4">
-              <a href="/" className="font-semibold text-lg text-ink hover:text-accent transition-colors">Sanjay Anasuri</a>
-              <ul className="flex gap-8 text-sm text-muted">
-                <li><a className="hover:text-accent transition-colors font-medium" href="/posts">Posts</a></li>
-                <li><a className="hover:text-accent transition-colors font-medium" href="/gallery">Gallery</a></li>
-                <li><a className="hover:text-accent transition-colors font-medium" href="/for-friends">For Friends</a></li>
-                <li><a className="hover:text-accent transition-colors font-medium" href="/for-employers">For Employers</a></li>
-                <li><a className="hover:text-accent transition-colors font-medium" href="/contact">Contact</a></li>
-              </ul>
-            </nav>
-          </header>
+      <body className="min-h-screen antialiased selection:bg-accent/30 selection:text-ink">
+        <div className="mx-auto max-w-4xl px-4 sm:px-8">
+          <Navbar />
           <main className="py-12 pb-20">{children}</main>
-          <footer className="border-t border-border/50 py-12 text-sm text-muted text-center">
-            © {new Date().getFullYear()} Sanjay Anasuri
+          <footer className="border-t border-border py-12 text-sm text-muted">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="space-y-1">
+                <p className="font-semibold text-ink">Sanjay Anasuri</p>
+                <p>© {new Date().getFullYear()} — Built with Next.js & Notion</p>
+              </div>
+              <div className="flex gap-6">
+                <a href="https://github.com" className="hover:text-accent font-medium">GitHub</a>
+                <a href="https://linkedin.com" className="hover:text-accent font-medium">LinkedIn</a>
+                <a href="mailto:contact@sanjayanasuri.com" className="hover:text-accent font-medium">Email</a>
+              </div>
+            </div>
           </footer>
         </div>
       </body>

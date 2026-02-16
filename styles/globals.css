@@ -5,231 +5,128 @@
 @tailwind utilities;
 
 :root {
-  /* Colors */
+  /* Colors - Refined for depth */
   --ink: #0f172a;
-  --muted: #6b7280;
+  --muted: #64748b;
   --surface: #ffffff;
-  --border: #d8e2f1;
+  --border: rgba(15, 23, 42, 0.08);
   --accent: #118ab2;
+  --accent-glow: rgba(17, 138, 178, 0.15);
   --accent-2: #ef476f;
-  --panel: rgba(255, 255, 255, 0.82);
-  --shadow: 0 18px 60px rgba(15, 23, 42, 0.12);
-  
-  /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-  
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-full: 999px;
+  --panel: rgba(255, 255, 255, 0.7);
+  --shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
 }
 
 @layer base {
   body {
     font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
-    color: #0f172a;
-    background: linear-gradient(180deg, #fdf7ec 0%, #eef6ff 60%, #f7f9fb 100%);
+    color: var(--ink);
+    background: #f8fafc;
+    /* Subtle mesh gradient background */
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(17, 138, 178, 0.05) 0, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(239, 71, 111, 0.05) 0, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(6, 214, 160, 0.05) 0, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(244, 162, 97, 0.05) 0, transparent 50%);
+    background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Noise Overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.03;
+    z-index: 9999;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 }
 
-/* Hide scrollbar for gallery carousel */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+@layer utilities {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.05),
+      0 10px 15px -3px rgba(0, 0, 0, 0.03);
+  }
+
+  .glass-card {
+    @apply glass-panel transition-all duration-500 relative overflow-hidden;
+  }
+
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .glass-card:hover::after {
+    opacity: 1;
+  }
+
+  .animate-reveal {
+    animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
 }
 
-/* Glassmorphism utility */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(17, 138, 178, 0.12);
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Pills/Badges */
-.pill {
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #d8e2f1;
-  font-weight: 600;
-  font-size: 13px;
-  transition: all 0.2s ease;
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-.pill--active {
-  border-color: #118ab2;
-  color: #118ab2;
-  box-shadow: 0 8px 20px rgba(17, 138, 178, 0.22);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-.pill--ghost {
-  background: rgba(17, 138, 178, 0.08);
-  border-color: rgba(17, 138, 178, 0.12);
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.1);
+  border-radius: 10px;
 }
-
-/* Button styles */
-.btn-gradient {
-  background: linear-gradient(120deg, #118ab2, #00b4d8);
-  color: white;
-  border: none;
-  border-radius: 14px;
-  padding: 10px 16px;
-  font-weight: 700;
-  box-shadow: 0 10px 20px rgba(17, 138, 178, 0.35);
-  transition: transform 0.2s ease;
-}
-
-.btn-gradient:hover {
-  transform: translateY(-1px);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.2);
 }
 
 .prose {
-  @apply text-muted leading-relaxed;
+  @apply text-slate-600 leading-relaxed;
 }
 
-.prose h1 {
-  @apply text-ink font-bold text-3xl mb-6 mt-8;
-}
+.prose h1 { @apply text-slate-900 font-bold text-4xl mb-8 mt-12; }
+.prose h2 { @apply text-slate-900 font-bold text-2xl mb-6 mt-10 border-b border-slate-100 pb-3; }
+.prose p { @apply mb-6; }
+.prose a { @apply text-accent font-medium hover:underline; }
 
-.prose h2 {
-  @apply text-ink font-semibold text-2xl mb-4 mt-8 border-b border-border pb-2;
-}
-
-.prose h3 {
-  @apply text-ink font-semibold text-xl mb-3 mt-6;
-}
-
-.prose h4 {
-  @apply text-ink font-semibold text-lg mb-2 mt-4;
-}
-
-.prose p {
-  @apply mb-4 leading-relaxed text-muted;
-}
-
-.prose a {
-  @apply text-accent underline decoration-accent/30 hover:decoration-accent transition-colors font-medium;
-}
-
-.prose img {
-  @apply rounded-xl shadow-brain-sm my-6;
-  border-radius: 0.75rem;
-}
-
-.prose code {
-  @apply bg-surface border border-border text-ink px-1.5 py-0.5 rounded text-sm font-mono;
-}
-
-.prose pre {
-  @apply bg-ink text-surface rounded-xl p-6 overflow-x-auto shadow-brain-sm my-6;
-}
-
-.prose pre code {
-  @apply bg-transparent text-surface p-0;
-}
-
-.prose blockquote {
-  @apply border-l-4 border-accent pl-6 italic text-muted my-6 bg-surface/50 py-4 rounded-r-lg;
-}
-
-.prose hr {
-  @apply border-border my-8;
-}
-
-.prose ul,
-.prose ol {
-  @apply mb-4 space-y-2;
-}
-
-.prose li {
-  @apply text-muted;
-}
-
-.prose strong {
-  @apply font-semibold text-ink;
-}
-
-.prose em {
-  @apply italic text-muted;
-}
-
-/* Custom Notion styling - Brain Web Design System */
+/* Notion Overrides */
 .notion-page {
-  @apply max-w-none;
+  @apply !max-w-4xl !p-0 mx-auto;
 }
 
-.notion-text {
-  @apply text-muted leading-relaxed text-base;
-}
-
-.notion-header {
-  @apply mb-8;
-}
-
-/* Enhanced Notion blocks */
-.notion-h {
-  @apply font-bold text-ink;
-}
-
-.notion-h1 {
-  @apply text-3xl font-bold text-ink mt-10 mb-6 pb-3 border-b border-border;
-}
-
-.notion-h2 {
-  @apply text-2xl font-semibold text-ink mt-8 mb-4;
-}
-
-.notion-h3 {
-  @apply text-xl font-semibold text-ink mt-6 mb-3;
-}
-
-.notion-image {
-  @apply rounded-2xl shadow-brain-sm my-8;
-}
-
-.notion-callout {
-  @apply rounded-xl p-6 my-6 border-l-4 glass-panel border-accent;
-}
-
-.notion-list {
-  @apply space-y-3;
-}
-
-.notion-list-item {
-  @apply text-muted leading-relaxed;
-}
-
-/* Code blocks */
-.notion-code {
-  @apply bg-ink text-surface rounded-xl p-6 shadow-brain-sm my-6 overflow-x-auto;
-}
-
-.notion-inline-code {
-  @apply bg-surface border border-border text-ink px-2 py-1 rounded text-sm font-mono;
-}
-
-/* Quotes */
-.notion-quote {
-  @apply border-l-4 border-accent pl-6 italic text-muted my-6 glass-panel py-4 rounded-r-lg;
-}
-
-/* Dividers */
-.notion-hr {
-  @apply border-border my-10;
-}
-
-/* Links */
-.notion-link {
-  @apply text-accent underline decoration-accent/30 hover:decoration-accent font-medium transition-colors;
+.notion-collection-row {
+  @apply glass-panel !rounded-xl !border-0 !shadow-sm !mb-4 p-4;
 }
