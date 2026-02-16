@@ -7,6 +7,15 @@ function fileUrl(prop: any): string | undefined {
   return f.type === "external" ? f.external.url : f.file.url;
 }
 
+function getProxyUrl(pageId: string, prop: string, originalUrl?: string) {
+  if (!originalUrl) return undefined;
+  // If it's a Notion S3 URL, use our stable proxy
+  if (originalUrl.includes('s3.us-west-2.amazonaws.com') || originalUrl.includes('secure.notion-static.com')) {
+    return `/api/image?pageId=${pageId}&prop=${encodeURIComponent(prop)}`;
+  }
+  return originalUrl;
+}
+
 export function mapPostMeta(page: any) {
   const p = page.properties || {};
   return {
@@ -14,7 +23,7 @@ export function mapPostMeta(page: any) {
     slug: text(p.Slug) || page.id,
     title: text(p.Title) || "Untitled",
     excerpt: text(p.Excerpt) || "",
-    cover: fileUrl(p.Cover),
+    cover: getProxyUrl(page.id, 'Cover', fileUrl(p.Cover)),
     publishedAt: p.PublishedAt?.date?.start || undefined,
     tags: (p.Tags?.multi_select || []).map((t: any) => t.name),
   } as {
@@ -24,9 +33,14 @@ export function mapPostMeta(page: any) {
 
 export function mapGalleryItem(page: any) {
   const p = page.properties || {};
+
+  // Find which property contains the image
+  const imagePropName = p.Media ? 'Media' : p.Image ? 'Image' : p.Photo ? 'Photo' : p.Picture ? 'Picture' : 'Cover';
+  const originalUrl = fileUrl(p[imagePropName]);
+
   return {
     id: page.id,
-    image: fileUrl(p.Media) || fileUrl(p.Image) || fileUrl(p.Photo) || fileUrl(p.Picture) || fileUrl(p.Cover),
+    image: getProxyUrl(page.id, imagePropName, originalUrl),
     title: text(p.Title) || text(p.Name) || text(p.Caption) || undefined,
     caption: text(p.Caption) || text(p.Description) || text(p.Alt) || undefined,
     category: p.Category?.select?.name || p.Category?.multi_select?.[0]?.name || undefined,
@@ -69,13 +83,18 @@ function url(prop: any): string | undefined {
 
 export function mapForFriendsItem(page: any) {
   const p = page.properties || {};
+
+  // Find which property contains the image
+  const imagePropName = p.Image ? 'Image' : p.Cover ? 'Cover' : p.Photo ? 'Photo' : undefined;
+  const originalUrl = imagePropName ? fileUrl(p[imagePropName]) : undefined;
+
   return {
     id: page.id,
     title: text(p.Title) || text(p.Name) || "Untitled",
     type: p.Type?.select?.name || p.Category?.select?.name || "Other",
     url: url(p.URL) || url(p.Link) || url(p.Spotify) || url(p.YouTube) || undefined,
     description: text(p.Description) || text(p.Why) || text(p.Notes) || undefined,
-    image: fileUrl(p.Image) || fileUrl(p.Cover) || fileUrl(p.Photo) || undefined,
+    image: imagePropName ? getProxyUrl(page.id, imagePropName, originalUrl) : undefined,
     date: p.Date?.date?.start || p.Created?.created_time || undefined,
     tags: (p.Tags?.multi_select || []).map((t: any) => t.name),
   } as {
@@ -92,55 +111,54 @@ export function mapForFriendsItem(page: any) {
 
 export function mapProject(page: any) {
   const p = page.properties || {};
-  
+
   // Helper to find property by name (case-insensitive, handles spaces)
-  const findProp = (names: string[]) => {
+  const findPropName = (names: string[]) => {
     const propKeys = Object.keys(p);
     for (const name of names) {
-      // Exact match
-      if (p[name]) return p[name];
-      // Case-insensitive match
+      if (p[name]) return name;
       const found = propKeys.find(key => key.toLowerCase() === name.toLowerCase());
-      if (found) return p[found];
-      // Match with spaces removed
+      if (found) return found;
       const foundNoSpaces = propKeys.find(key => key.replace(/\s+/g, '').toLowerCase() === name.replace(/\s+/g, '').toLowerCase());
-      if (foundNoSpaces) return p[foundNoSpaces];
+      if (foundNoSpaces) return foundNoSpaces;
     }
     return null;
   };
-  
+
   // Find name/title property
-  const nameProp = findProp(['Name', 'Title', 'Project Name', 'Project']);
-  const projectName = text(nameProp) || "Untitled Project";
-  
+  const namePropName = findPropName(['Name', 'Title', 'Project Name', 'Project']);
+  const projectName = text(p[namePropName || '']) || "Untitled Project";
+
   // Find repository property
-  const repoProp = findProp(['Repository', 'Repo', 'GitHub', 'URL', 'Link', 'Github URL', 'Repository URL']);
-  const repoUrl = url(repoProp) || undefined;
-  
+  const repoPropName = findPropName(['Repository', 'Repo', 'GitHub', 'URL', 'Link', 'Github URL', 'Repository URL']);
+  const repoUrl = url(p[repoPropName || '']) || undefined;
+
   // Find demo property
-  const demoProp = findProp(['Demo', 'Live', 'DemoURL', 'Live Demo', 'Demo URL']);
-  const demoUrl = url(demoProp) || undefined;
-  
+  const demoPropName = findPropName(['Demo', 'Live', 'DemoURL', 'Live Demo', 'Demo URL']);
+  const demoUrl = url(p[demoPropName || '']) || undefined;
+
   // Find screenshot property
-  const screenshotProp = findProp(['Screenshot', 'Image', 'Cover', 'Thumbnail', 'Screenshot Image']);
-  const screenshot = fileUrl(screenshotProp) || undefined;
-  
+  const screenshotPropName = findPropName(['Screenshot', 'Image', 'Cover', 'Thumbnail', 'Screenshot Image']);
+  const screenshotUrl = screenshotPropName ? fileUrl(p[screenshotPropName]) : undefined;
+  const screenshot = screenshotPropName ? getProxyUrl(page.id, screenshotPropName, screenshotUrl) : undefined;
+
   // Find video property
-  const videoProp = findProp(['Video', 'Demo Video', 'Video URL']);
-  const video = url(videoProp) || fileUrl(videoProp) || undefined;
-  
+  const videoPropName = findPropName(['Video', 'Demo Video', 'Video URL']);
+  const video = url(p[videoPropName || '']) || fileUrl(p[videoPropName || '']) || undefined;
+
   // Find description property
-  const descProp = findProp(['Description', 'About', 'Summary', 'Project Description']);
-  const description = text(descProp) || undefined;
-  
+  const descPropName = findPropName(['Description', 'About', 'Summary', 'Project Description']);
+  const description = text(p[descPropName || '']) || undefined;
+
   // Find order property
-  const orderProp = findProp(['Order', 'Sort', 'Display Order']);
-  const order = orderProp?.number || undefined;
-  
+  const orderPropName = findPropName(['Order', 'Sort', 'Display Order']);
+  const order = p[orderPropName || '']?.number || undefined;
+
   // Find tags property
-  const tagsProp = findProp(['Tags', 'Tag', 'Categories', 'Category']);
+  const tagsPropName = findPropName(['Tags', 'Tag', 'Categories', 'Category']);
+  const tagsProp = p[tagsPropName || ''];
   const tags = (tagsProp?.multi_select || tagsProp?.select ? [tagsProp.select || tagsProp.multi_select].flat() : []).map((t: any) => t?.name || t).filter(Boolean);
-  
+
   return {
     id: page.id,
     name: projectName,
