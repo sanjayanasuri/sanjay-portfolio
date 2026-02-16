@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 type ImageLightboxProps = {
@@ -18,8 +18,11 @@ export default function ImageLightbox({
   title,
   caption,
 }: ImageLightboxProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     if (isOpen) {
+      setIsLoading(true); // Reset loading state when opened
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -59,28 +62,33 @@ export default function ImageLightbox({
 
       {/* Image container */}
       <div
-        className="relative w-full h-full max-w-7xl max-h-[90vh] p-4 flex flex-col"
+        className="relative w-full h-full max-w-7xl max-h-[90vh] p-4 flex flex-col animate-in fade-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Image */}
         <div className="relative flex-1 min-h-0 flex items-center justify-center">
-          <div className="relative w-full h-full max-h-full">
-            <Image
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-mint/20 border-t-mint rounded-full animate-spin" />
+            </div>
+          )}
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Standard img for maximum compatibility with proxied URLs */}
+            <img
               src={imageUrl}
               alt={title || caption || "Gallery image"}
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+              onLoad={() => setIsLoading(false)}
+              style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}
             />
           </div>
         </div>
 
         {/* Title and caption */}
         {(title || caption) && (
-          <div className="mt-4 text-center text-white">
-            {title && <h3 className="text-xl font-semibold mb-2">{title}</h3>}
-            {caption && <p className="text-white/80">{caption}</p>}
+          <div className="mt-6 text-center text-white bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/10 max-w-2xl mx-auto">
+            {title && <h3 className="text-2xl font-semibold mb-2 text-mint group-hover:text-mint transition-colors">{title}</h3>}
+            {caption && <p className="text-white/80 leading-relaxed font-light">{caption}</p>}
           </div>
         )}
       </div>

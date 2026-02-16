@@ -65,7 +65,7 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-mint/5 blur-[100px] rounded-full pointer-events-none" />
         <h1 className="text-4xl font-semibold mb-6 text-ink tracking-tight relative">Gallery</h1>
         <p className="text-lg text-muted max-w-2xl mx-auto leading-relaxed relative">
-          Technical captures, visual artifacts, and moments from the field.
+          Visual artifacts, technical captures, and experiments in form.
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
         </div>
       )}
 
-      {/* Gallery Grid */}
+      {/* Masonry-style Gallery Grid */}
       {filteredItems.length === 0 ? (
         <div className="py-24 text-center glass-panel rounded-3xl border-dashed border-border/40">
           <p className="text-muted italic">
@@ -104,30 +104,30 @@ export default function GalleryPageClient({ initialItems }: { initialItems: Gall
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              className="group relative aspect-[4/5] overflow-hidden rounded-2xl glass-panel cursor-pointer border-border/40 transition-all duration-500 hover:shadow-mint-sm"
+              className="break-inside-avoid group relative overflow-hidden rounded-2xl glass-panel cursor-pointer border-border/40 transition-all duration-500 hover:shadow-mint-sm"
               onClick={() => handleImageClick(item)}
             >
               {item.image && (
-                <Image
-                  src={item.image}
-                  alt={item.title || item.caption || "Gallery image"}
-                  fill
-                  className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-80 group-hover:opacity-100"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
+                <div className="relative w-full">
+                  <img
+                    src={item.image}
+                    alt={item.title || item.caption || "Gallery image"}
+                    className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-700 opacity-95 group-hover:opacity-100"
+                  />
+                </div>
               )}
 
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                   {item.title && (
                     <h3 className="text-white font-semibold text-lg mb-1">{item.title}</h3>
                   )}
                   {item.caption && (
-                    <p className="text-white/80 text-sm line-clamp-2">{item.caption}</p>
+                    <p className="text-white/80 text-sm line-clamp-3">{item.caption}</p>
                   )}
                   {item.tags && item.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
