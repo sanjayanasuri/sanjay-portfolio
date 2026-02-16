@@ -30,10 +30,10 @@ export default function Navbar() {
                         return (
                             <li key={item.href}>
                                 <Link
-                                    href={item.href}
+                                    href={item.href as any}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${isActive
-                                            ? "text-accent bg-accent/5"
-                                            : "text-muted hover:text-ink hover:bg-black/5"
+                                        ? "text-accent bg-accent/5"
+                                        : "text-muted hover:text-ink hover:bg-black/5"
                                         }`}
                                 >
                                     {item.label}
