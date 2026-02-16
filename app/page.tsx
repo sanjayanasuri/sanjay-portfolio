@@ -41,7 +41,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="flex gap-8 text-sm font-medium">
-            <Link href="/for-employers" className="text-ink hover:text-accent transition-colors underline decoration-accent/30 underline-offset-4">Projects</Link>
+            <Link href="/projects" className="text-ink hover:text-accent transition-colors underline decoration-accent/30 underline-offset-4">Projects</Link>
             <Link href="/posts" className="text-ink hover:text-accent transition-colors underline decoration-accent-2/30 underline-offset-4">Writing</Link>
             <Link href="/gallery" className="text-ink hover:text-accent transition-colors underline decoration-mint/30 underline-offset-4">Gallery</Link>
           </div>
@@ -53,7 +53,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-min">
           {/* Brain Web */}
           <Link
-            href="/for-employers"
+            href="/projects"
             className="md:col-span-4 md:row-span-2 group relative glass-panel rounded-2xl p-8 flex flex-col justify-end min-h-[360px] animate-reveal delay-100 border-border/40 overflow-hidden"
           >
             <div className="absolute inset-0 opacity-[0.25] group-hover:opacity-[0.4] transition-opacity bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
