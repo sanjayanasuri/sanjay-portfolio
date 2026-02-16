@@ -59,23 +59,30 @@ export function mapGalleryItem(page: any) {
 
 function url(prop: any): string | undefined {
   try {
+    let result: string | undefined = undefined;
+
     // Handle Notion URL property type
     if (prop?.type === 'url') {
-      return prop.url || undefined;
+      result = prop.url || undefined;
     }
     // Handle URL as direct property
-    if (prop?.url) {
-      return prop.url;
+    else if (prop?.url) {
+      result = prop.url;
     }
     // Handle rich_text that might contain a URL
-    if (prop?.rich_text?.[0]?.plain_text) {
-      const text = prop.rich_text[0].plain_text;
-      // Check if it looks like a URL
-      if (text.startsWith('http://') || text.startsWith('https://')) {
-        return text;
+    else if (prop?.rich_text?.[0]?.plain_text) {
+      const textVal = prop.rich_text[0].plain_text;
+      if (textVal.startsWith('http://') || textVal.startsWith('https://')) {
+        result = textVal;
       }
     }
-    return undefined;
+
+    // Intercept Brain Web URL to ensure it always points to the health subpath
+    if (result && result.includes('demo.sanjayanasuri.com') && !result.includes('/health/')) {
+      return result.endsWith('/') ? `${result}health/` : `${result}/health/`;
+    }
+
+    return result;
   } catch {
     return undefined;
   }
