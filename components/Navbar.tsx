@@ -16,20 +16,28 @@ export default function Navbar() {
 
     return (
         <header className="sticky top-6 z-50 px-4 sm:px-0">
-            <nav className="mx-auto max-w-4xl glass-panel rounded-full px-6 py-3 flex items-center justify-center sm:justify-between shadow-brain-sm border-white/20">
+            <nav className="mx-auto max-w-4xl glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-brain-sm border-white/20">
+                <Link
+                    href="/"
+                    className="text-sm font-bold text-ink hover:text-accent transition-colors"
+                >
+                    Sanjay
+                </Link>
+
                 <ul className="flex gap-1 items-center">
                     {navItems.map((item) => {
+                        const label = item.label === "Employers" ? "Projects" : item.label;
                         const isActive = pathname === item.href;
                         return (
                             <li key={item.href}>
                                 <Link
                                     href={item.href as any}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${isActive
-                                        ? "text-accent bg-accent/5"
-                                        : "text-muted hover:text-ink hover:bg-black/5"
+                                    className={`px-3 sm:px-4 py-2 rounded-full text-sm font-medium transition-all ${isActive
+                                            ? "text-accent bg-accent/5"
+                                            : "text-muted hover:text-ink hover:bg-black/5"
                                         }`}
                                 >
-                                    {item.label === "Employers" ? "Projects" : item.label}
+                                    {label}
                                 </Link>
                             </li>
                         );
