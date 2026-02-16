@@ -21,7 +21,7 @@ export default function Navbar() {
                     href="/"
                     className="text-sm font-bold text-ink hover:text-accent transition-colors"
                 >
-                    Sanjay
+                    Home
                 </Link>
 
                 <ul className="flex gap-1 items-center">
@@ -33,8 +33,8 @@ export default function Navbar() {
                                 <Link
                                     href={item.href as any}
                                     className={`px-3 sm:px-4 py-2 rounded-full text-sm font-medium transition-all ${isActive
-                                            ? "text-accent bg-accent/5"
-                                            : "text-muted hover:text-ink hover:bg-black/5"
+                                        ? "text-accent bg-accent/5"
+                                        : "text-muted hover:text-ink hover:bg-black/5"
                                         }`}
                                 >
                                     {label}
