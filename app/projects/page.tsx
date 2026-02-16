@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
         </div>
 
         <a
-          href="https://www.demo.sanjayanasuri.com"
+          href="https://demo.sanjayanasuri.com/health/"
           target="_blank"
           rel="noopener noreferrer"
           className="block group relative"

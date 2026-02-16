@@ -52,8 +52,10 @@ export default async function Home() {
       <section className="space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-min">
           {/* Brain Web */}
-          <Link
-            href="/projects"
+          <a
+            href="https://demo.sanjayanasuri.com/health/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="md:col-span-4 md:row-span-2 group relative glass-panel rounded-2xl p-8 flex flex-col justify-end min-h-[360px] animate-reveal delay-100 border-border/40 overflow-hidden"
           >
             <div className="absolute inset-0 opacity-[0.25] group-hover:opacity-[0.4] transition-opacity bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
@@ -64,7 +66,7 @@ export default async function Home() {
                 A platform for visualizing interconnected knowledge and identifying research opportunities.
               </p>
             </div>
-          </Link>
+          </a>
 
           {/* Lecture Series (Featured Post) */}
           {graphTheoryPost && (
