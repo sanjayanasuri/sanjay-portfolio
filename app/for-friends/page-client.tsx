@@ -83,17 +83,17 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-accent-2/5 blur-[100px] rounded-full pointer-events-none" />
         <h1 className="text-4xl font-semibold mb-6 text-ink tracking-tight relative">For Friends</h1>
         <p className="text-lg text-muted max-w-2xl mx-auto leading-relaxed relative">
-          A curated collection of artifacts, resonance, and technical curiosities.
+          Things I'm into, stuff I like, and recommendations for the signal.
         </p>
       </div>
 
-      {/* Type Filters */}
+      {/* Type Filters - Simplified */}
       {types.length > 0 && (
         <div className="flex flex-wrap gap-2 justify-center relative z-10">
           <button
             onClick={() => setSelectedType(null)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedType === null
-                ? "text-accent-2 bg-accent-2/5 shadow-sm"
+            className={`px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase transition-all ${selectedType === null
+                ? "text-ink bg-black/5 shadow-sm"
                 : "text-muted hover:text-ink hover:bg-black/5"
               }`}
           >
@@ -103,12 +103,12 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
             <button
               key={type}
               onClick={() => setSelectedType(type)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${selectedType === type
-                  ? "text-accent-2 bg-accent-2/5 shadow-sm"
+              className={`px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase transition-all ${selectedType === type
+                  ? "text-ink bg-black/5 shadow-sm"
                   : "text-muted hover:text-ink hover:bg-black/5"
                 }`}
             >
-              {getTypeIcon(type)} {type}
+              {type}
             </button>
           ))}
         </div>
@@ -118,7 +118,7 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
       {filteredItems.length === 0 ? (
         <div className="py-24 text-center glass-panel rounded-3xl border-dashed border-border/40">
           <p className="text-muted italic">
-            {selectedType ? `No resonance found for signal "${selectedType}"` : "The archive is currently empty."}
+            {selectedType ? `No items found for "${selectedType}"` : "This collection is empty."}
           </p>
         </div>
       ) : (
@@ -212,9 +212,9 @@ export default function ForFriendsPageClient({ initialItems }: { initialItems: F
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-xs font-bold text-ink hover:text-accent-2 transition-colors uppercase tracking-widest"
                       >
-                        {embedInfo?.type === "spotify" ? "Resonate on Spotify" :
-                          embedInfo?.type === "youtube" ? "Witness on YouTube" :
-                            "Sync Artifact"}
+                        {embedInfo?.type === "spotify" ? "Listen" :
+                          embedInfo?.type === "youtube" ? "Watch" :
+                            "Visit"}
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
