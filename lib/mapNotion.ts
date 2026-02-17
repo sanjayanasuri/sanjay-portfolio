@@ -57,6 +57,22 @@ export function mapGalleryItem(page: any) {
   };
 }
 
+export function normalizeBrainWebUrl(url: string | undefined): string | undefined {
+  if (!url || !url.includes('demo.sanjayanasuri.com')) return url;
+
+  let result = url;
+  // If it doesn't already have 'health' in the path, append it
+  if (!result.toLowerCase().includes('/health')) {
+    const base = result.endsWith('/') ? result : `${result}/`;
+    result = `${base}health/`;
+  }
+  // If it has 'health' but no trailing slash, ensure it has one
+  else if (result.toLowerCase().endsWith('/health')) {
+    result = `${result}/`;
+  }
+  return result;
+}
+
 function url(prop: any): string | undefined {
   try {
     let result: string | undefined = undefined;
@@ -77,12 +93,7 @@ function url(prop: any): string | undefined {
       }
     }
 
-    // Intercept Brain Web URL to ensure it always points to the health subpath
-    if (result && result.includes('demo.sanjayanasuri.com') && !result.includes('/health/')) {
-      return result.endsWith('/') ? `${result}health/` : `${result}/health/`;
-    }
-
-    return result;
+    return normalizeBrainWebUrl(result);
   } catch {
     return undefined;
   }

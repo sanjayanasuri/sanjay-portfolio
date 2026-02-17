@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { listPosts, listGalleryItems } from "@/lib/notion";
-import { mapPostMeta, mapGalleryItem } from "@/lib/mapNotion";
+import { mapPostMeta, mapGalleryItem, normalizeBrainWebUrl } from "@/lib/mapNotion";
 import ProfileImage from "@/components/ProfileImage";
 import GalleryCarousel from "@/components/GalleryCarousel";
 
@@ -53,7 +53,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-min">
           {/* Brain Web */}
           <a
-            href="https://demo.sanjayanasuri.com/health/"
+            href={normalizeBrainWebUrl("https://demo.sanjayanasuri.com/")}
             target="_blank"
             rel="noopener noreferrer"
             className="md:col-span-4 md:row-span-2 group relative glass-panel rounded-2xl p-8 flex flex-col justify-end min-h-[360px] animate-reveal delay-100 border-border/40 overflow-hidden"
